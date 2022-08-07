@@ -1,0 +1,74 @@
+import { FileReferencesService } from "../../../../services/file-references.service";
+import { NotificationModel, MessageCategory } from "../../../../services/models/general/notification.model";
+import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { ADD_NOTIFICATION } from "../../../components/notifications/notification-panel";
+
+export class UploadRemoteFileForm extends VBSComponent<HTMLElement> {
+  private fileReferenceService : FileReferencesService;
+
+  // VBS assignments
+  private fileUrlInput : HTMLInputElement;
+  private fileNameInput : HTMLInputElement;
+
+  readTemplate(): string {
+    return require('./upload-remote-file-form.html').default;
+  }
+
+  hasAssignments(): boolean {
+    return true;
+  }
+
+  hasEventListeners(): boolean {
+    return true;
+  }
+
+  beforeVBSComponentAdded(): void {
+    this.fileReferenceService = this.registry.getService(FileReferencesService);
+  }
+
+  // VBS onclick event
+  private uploadRemoteFile(event : MouseEvent): void {
+    event.preventDefault();
+
+    const fileUrl = this.getFileUrl();
+    const fileName = this.getFileName();
+    if (!fileUrl || !fileName) {
+      this.sendNotification({
+        message: 'You must first select a URL and provide a name',
+        messageCategory: MessageCategory.ERROR
+      });
+
+      return;
+    }
+
+    this.fileReferenceService.uploadRemoteFile({
+      file_name: fileName,
+      download_link: fileUrl
+    }).then(this.onUploadSuccess.bind(this));
+  }
+
+  private onUploadSuccess() : void {
+    const notificationCallback : (notification : NotificationModel) => void = this.registry.getCallback(ADD_NOTIFICATION);
+    notificationCallback({
+      message: 'File Upload has Begun',
+      messageCategory: MessageCategory.INFO
+    });
+  }
+
+  private sendNotification(notification: NotificationModel) : void {
+    const notificationCallback : (notification : NotificationModel) => void = this.registry.getCallback(ADD_NOTIFICATION);
+    notificationCallback(notification);
+  }
+
+  private getFileUrl() : string {
+    if (!this.fileUrlInput) return null;
+
+    return this.fileUrlInput.value;
+  }
+
+  private getFileName() : string {
+    if (!this.fileNameInput) return null;
+
+    return this.fileNameInput.value;
+  }
+}

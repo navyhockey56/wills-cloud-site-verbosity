@@ -1,0 +1,28 @@
+<section class="padded-2">
+  <article class="panel">
+    <section class="section">
+      <div class="field top-padded-1">
+        <label class="label">Username</label>
+        <div class="top-padded-quarter">
+          <input data-vbs-assign="usernameInput" class="input" placeholder="Your username"/>
+        </div>
+      </div>
+
+      <div class="field top-padded-1">
+        <label class="label">Password</label>
+        <div class="top-padded-quarter">
+          <input
+            data-vbs-assign="passwordInput"
+            data-vbs-event-onkeydown="onEnterInPasswordField"
+            class="input"
+            placeholder="Your password"
+            type="password"/>
+        </div>
+      </div>
+
+      <div class="buttons top-padded-one-and-a-half">
+        <a class="button is-info" data-vbs-event-onclick="login">Login</a>
+      </div>
+    </section>
+  </article>
+</section>
