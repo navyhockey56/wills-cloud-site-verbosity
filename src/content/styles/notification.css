@@ -1,0 +1,26 @@
+.notification-panel {
+  position: fixed;
+  margin-top: 1em;
+  left: 65%;
+  right: 1%;
+  z-index: 2;
+}
+
+.notification {
+  -webkit-animation: fadein 1s;
+  animation: fadein 1s;
+  list-style: none;
+  padding-left: 1.25em;
+  padding-right: 1.25em;
+  padding-top: 0.75em;
+  padding-bottom: 0.75em;
+  border: solid black 1px;
+  border-radius: 25px;
+  color: white;
+}
+
+
+.fade-out {
+  -webkit-animation: fadeout 1s;
+  animation: fadeout 1s;
+}

@@ -15,6 +15,12 @@ import { NotificationPanel } from "./content/components/notifications/notificati
 
 require('./index.css');
 
+require('./content/styles/basic.css');
+require('./content/styles/button.css');
+require('./content/styles/logo.css');
+require('./content/styles/notification.css');
+require('./content/styles/panel.css');
+
 const APP = new VerbosityApp();
 
 APP.registerService(new SessionService);

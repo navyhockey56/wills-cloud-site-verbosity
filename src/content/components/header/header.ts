@@ -1,3 +1,4 @@
+import { CallbackGroups } from "../../../constants/callbacks.enum";
 import { SessionService } from "../../../services/session.service";
 import { VBSComponent } from "../../../_verbosity/verbosity-component";
 import { LogoutButton } from "./logout-button";
@@ -35,18 +36,32 @@ export class Header extends VBSComponent<HTMLDivElement> {
   beforeVBSComponentAdded(): void {
     this.homeLogoElement.href = '/';
 
-    this.sessionService = this.registry.getService(SessionService);
-    this.sessionService.registerOnSessionSetCallback(this.onSessionSetCallback);
-    this.sessionService.registerOnSessionClearedCallback(this.onSessionClearedCallback);
+    this.registry.registerWithCallbackGroup(
+      CallbackGroups.ON_SESSION_SET.toString(),
+      this.onSessionSetCallback
+    );
 
+    this.registry.registerWithCallbackGroup(
+      CallbackGroups.ON_SESSION_CLEARED.toString(),
+      this.onSessionClearedCallback
+    );
+
+    this.sessionService = this.registry.getService(SessionService);
     if (!this.sessionService.hasSession()) return;
 
     this.bindLogoutButton();
   }
 
   beforeVBSComponentRemoved(): void {
-    this.sessionService.unRegisterOnSessionSetCallback(this.onSessionSetCallback);
-    this.sessionService.unRegisterOnSessionClearedCallback(this.onSessionClearedCallback);
+    this.registry.unregisterWithCallbackGroup(
+      CallbackGroups.ON_SESSION_SET.toString(),
+      this.onSessionSetCallback
+    );
+
+    this.registry.unregisterWithCallbackGroup(
+      CallbackGroups.ON_SESSION_CLEARED.toString(),
+      this.onSessionClearedCallback
+    );
   }
 
   private bindLogoutButton() : void {
@@ -58,10 +73,10 @@ export class Header extends VBSComponent<HTMLDivElement> {
     this.dom.removeChildVBSComponent(this, this.logoutButtonVBSComponent)
   }
 
+  // VBS onclick event
   private goHome(event : MouseEvent) : void {
     event.preventDefault();
 
-    console.log("Going home...")
     this.router.goTo('/');
   }
 }

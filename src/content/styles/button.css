@@ -1,0 +1,17 @@
+a.button {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  border-radius: 25em;
+  text-decoration: none !important;
+}
+
+
+div.buttons > span {
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}

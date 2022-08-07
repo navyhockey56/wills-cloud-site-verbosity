@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "PORT=1234 NODE_ENV=development mode=development webpack serve",
-    "prod": "NODE_ENV=production mode=production webpack",
+    "dev": "PORT=3000 NODE_ENV=development mode=development webpack serve",
+    "prod": "NODE_ENV=production mode=production webpack && cp public/* dist/",
     "clean": "rm -rf dist/"
   },
   "author": "Will Dengler",

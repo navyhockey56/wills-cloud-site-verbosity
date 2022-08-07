@@ -1,8 +1,7 @@
+import { Callbacks } from "../../../constants/callbacks.enum";
 import { NotificationModel } from "../../../services/models/general/notification.model";
 import { VBSComponent } from "../../../_verbosity/verbosity-component";
 import { NotificationEntry } from "./notification-entry";
-
-export const ADD_NOTIFICATION : string = 'ADD_NOTIFICATION_CALLBACK';
 
 export class NotificationPanel extends VBSComponent<HTMLUListElement> {
 
@@ -11,7 +10,10 @@ export class NotificationPanel extends VBSComponent<HTMLUListElement> {
   }
 
   beforeVBSComponentAdded(): void {
-    this.registry.registerCallback(ADD_NOTIFICATION, this.addNotification.bind(this));
+    this.registry.registerCallback(
+      Callbacks.ADD_NOTIFICATION.toString(),
+      this.addNotification.bind(this)
+    );
   }
 
   private addNotification(notification: NotificationModel) {

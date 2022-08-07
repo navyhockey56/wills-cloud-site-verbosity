@@ -9,11 +9,13 @@ export class VerbosityRegistry {
   // private stateRegistry : Record<string, VBSState>;
 
   private callbackRegister : Record<string, any>;
+  private callbackGroupRegister: Record<string, any[]>;
 
   constructor() {
     this.serviceVerbosityRegistry = {};
     this.guardRegister = {};
     this.callbackRegister = {};
+    this.callbackGroupRegister = {};
     // this.stateRegistry = {};
   }
 
@@ -41,6 +43,27 @@ export class VerbosityRegistry {
 
   getCallback<T>(key: string) : T {
     return this.callbackRegister[key] as T;
+  }
+
+  registerWithCallbackGroup(group: string, callback: any) : void {
+    const callbacks = (this.callbackGroupRegister[group] ||= []);
+    callbacks.push(callback);
+  }
+
+  unregisterWithCallbackGroup(group: string, callback: any) : void {
+    const callbacks = this.callbackGroupRegister[group];
+    if (!callbacks) {
+      throw Error(`Callback group ${group} does not exist`);
+    }
+
+    this.callbackGroupRegister[group] = (callbacks as any[]).filter(element => element != callback);
+  }
+
+  getCallbackGroup<T>(group : string) : T[] {
+    const callbacks = this.callbackGroupRegister[group];
+    if (!callbacks) return [];
+
+    return callbacks as T[];
   }
 
   // registerState(key: string, state : VBSState) {

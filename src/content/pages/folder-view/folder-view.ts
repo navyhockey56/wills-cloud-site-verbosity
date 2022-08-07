@@ -1,14 +1,20 @@
 import { FileReferencesService } from "../../../services/file-references.service";
 import { FolderService } from "../../../services/folder.service";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
+import { PaginatedAPIResponse } from "../../../services/models/responses/api-response";
 import { FolderResponse } from "../../../services/models/responses/folder.response";
 import { VBSComponent } from "../../../_verbosity/verbosity-component";
 import { FileReferenceListEntryVBSComponent } from "./components/file-reference-list-entry";
 import { FoldersListEntryVBSComponent } from "./components/folder-list-entry";
+import { LoadMoreEntry } from "./components/load-more-entry";
+import { nextPageRequest } from "../../../services/tooling/request-helpers";
 
 export class FolderViewPage extends VBSComponent<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private folderService : FolderService;
+
+  private fileReferenceResponse : PaginatedAPIResponse<FileReferenceModel[]>;
+  private loadMoreEntry : LoadMoreEntry;
 
   // Instance parameters
   private folder : FolderResponse;
@@ -62,11 +68,24 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
   }
 
   private loadFiles() : void {
-    this.fileReferenceService.list({ parent_folder: this.folder.id }).then((fileReferences : FileReferenceModel[]) => {
-      fileReferences.forEach((fileReference : FileReferenceModel) => {
+    const baseRequest = { parent_folder: this.folder.id };
+    const request = this.fileReferenceResponse ? nextPageRequest(this.fileReferenceResponse, baseRequest) : baseRequest
+
+    this.fileReferenceService.list(request).then((response : PaginatedAPIResponse<FileReferenceModel[]>) => {
+      this.fileReferenceResponse = response;
+      if (this.loadMoreEntry) {
+        this.removeChildComponent(this.loadMoreEntry);
+      }
+
+      response.data.forEach((fileReference : FileReferenceModel) => {
         const fileListEntry = new FileReferenceListEntryVBSComponent(fileReference);
         this.appendChildToMount(this.filesMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
-      })
+      });
+
+      if (response.nextPage) {
+        this.loadMoreEntry = new LoadMoreEntry(this.loadFiles.bind(this));
+        this.appendChildToMount(this.filesMount, this.loadMoreEntry);
+      }
     });
   }
 }

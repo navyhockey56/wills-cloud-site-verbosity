@@ -1,7 +1,7 @@
+import { Callbacks } from "../../../../constants/callbacks.enum";
 import { FileReferencesService } from "../../../../services/file-references.service";
 import { NotificationModel, MessageCategory } from "../../../../services/models/general/notification.model";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
-import { ADD_NOTIFICATION } from "../../../components/notifications/notification-panel";
 
 export class UploadRemoteFileForm extends VBSComponent<HTMLElement> {
   private fileReferenceService : FileReferencesService;
@@ -48,15 +48,16 @@ export class UploadRemoteFileForm extends VBSComponent<HTMLElement> {
   }
 
   private onUploadSuccess() : void {
-    const notificationCallback : (notification : NotificationModel) => void = this.registry.getCallback(ADD_NOTIFICATION);
-    notificationCallback({
+    this.sendNotification({
       message: 'File Upload has Begun',
       messageCategory: MessageCategory.INFO
     });
   }
 
   private sendNotification(notification: NotificationModel) : void {
-    const notificationCallback : (notification : NotificationModel) => void = this.registry.getCallback(ADD_NOTIFICATION);
+    const notificationCallback : (notification : NotificationModel) => void =
+      this.registry.getCallback(Callbacks.ADD_NOTIFICATION.toString());
+
     notificationCallback(notification);
   }
 

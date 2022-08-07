@@ -1,0 +1,166 @@
+.padded-quarter {
+  padding: 0.25em;
+}
+
+.padded-1 {
+  padding: 1em;
+}
+
+.padded-2 {
+  padding: 2em;
+}
+
+.vertical-padded-half {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.horizontal-padded-three-quarters {
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+}
+
+.margin-quarter {
+  margin: 0.25em;
+}
+
+.margin-1 {
+  margin: 1em;
+}
+
+.margin-2 {
+  margin: 2em;
+}
+
+.top-padded-quarter {
+  padding-top: 0.25em;
+}
+
+.top-padded-half {
+  padding-top: 0.5em;
+}
+
+.top-padded-1 {
+  padding-top: 1em;
+}
+
+.top-padded-one-and-a-half {
+  padding-top: 1.5em;
+}
+
+.top-margin-1 {
+  margin-top: 1em;
+}
+
+.bottom-padded-1 {
+  padding-bottom: 1em;
+}
+
+.bottom-padded-2 {
+  padding-bottom: 2em;
+}
+
+.side-padded-2 {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+.bottom-margin-1 {
+  margin-bottom: 1em;
+}
+
+.bottom-padded-half {
+  padding-bottom: 0.5em;
+}
+
+.bottom-margin-half {
+  margin-bottom: 0.5em;
+}
+
+.left-padded-1 {
+  padding-left: 1em !important;
+}
+
+.left-padded-1_5 {
+  padding-left: 1.5em !important;
+}
+
+.left-padded-2 {
+  padding-left: 2em !important;
+}
+
+.bottom-padded-1 {
+  padding-bottom: 1em;
+}
+
+.bottom-padded-2 {
+  padding-bottom: 2em;
+}
+
+.right-padded-1 {
+  padding-right: 1em;
+}
+
+.right-padded-2 {
+  padding-right: 2em;
+}
+
+.not-top-padded-1 {
+  padding: 1em;
+  padding-top: 0em;
+}
+
+.not-top-padded-2 {
+  padding: 2em;
+  padding-top: 0em;
+}
+
+.negative-margin-top {
+  margin-top: -0.5em;
+}
+
+.negative-margin-top-1 {
+  margin-top: -1em;
+}
+
+.negative-margin-top-2 {
+  margin-top: -2em;
+}
+
+.negative-margin-top-3 {
+  margin-top: -3em;
+}
+
+.negative-margin-top {
+  margin-top: -0.5em;
+}
+
+.negative-margin-bottom-1 {
+  margin-bottom: -1em;
+}
+
+.negative-margin-bottom-2 {
+  margin-bottom: -2em;
+}
+
+.negative-margin-bottom-3 {
+  margin-bottom: -3em;
+}
+
+.is-wide {
+  min-width: 100%;
+  display: inline-block;
+}
+
+.is-full-width {
+  width: 100%;
+}
+
+.is-tall {
+  min-height: 100%;
+  display: inline-block;
+}
+
+.center {
+  text-align: center;
+}

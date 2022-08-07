@@ -1,7 +1,7 @@
 const PORT = process.env.PORT || 3000;
 
 module.exports = {
-  devtool: "cheap-module-source-map",
+  devtool: "inline-source-map",
   output: {
     filename: 'main.js',
     publicPath: '/'

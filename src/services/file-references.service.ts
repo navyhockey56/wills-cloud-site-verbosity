@@ -2,7 +2,8 @@ import { AbstractAuthenticatedService } from "./abstract-authenticated.service";
 import { FileReferencesRequest } from "./models/requests/file-references.request";
 import { UploadRemoteFileRequest } from "./models/requests/upload-remote-file.request";
 import { FileReferenceModel } from "./models/responses/file-reference.response";
-import { createEndpoint } from "./tooling/request-helpers";
+import { APIResponse, PaginatedAPIResponse } from "./models/responses/api-response";
+import { createEndpoint, toPaginatedResponse } from "./tooling/request-helpers";
 
 export class FileReferencesService extends AbstractAuthenticatedService {
 
@@ -19,14 +20,14 @@ export class FileReferencesService extends AbstractAuthenticatedService {
     return response.json();
   }
 
-  async list(params: FileReferencesRequest = {}) : Promise<FileReferenceModel[]> {
+  async list(params: FileReferencesRequest = {}) : Promise<PaginatedAPIResponse<FileReferenceModel[]>> {
     const endpoint = createEndpoint('file_references', params);
     const response : Response = await fetch(endpoint, {
       method: 'GET',
       headers: this.basicHeaders(),
     });
 
-    return response.json();
+    return toPaginatedResponse(response);
   }
 
   async uploadRemoteFile(request : UploadRemoteFileRequest) : Promise<Response> {

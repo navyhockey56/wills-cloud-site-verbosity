@@ -34,6 +34,7 @@ export class FileReferenceView extends VBSComponent<HTMLElement> {
 
   setFileReference(fileReference : FileReferenceModel) {
     this.fileReference = fileReference;
+    this.fileId = this.fileReference.id;
   }
 
   beforeVBSComponentAdded(): void {

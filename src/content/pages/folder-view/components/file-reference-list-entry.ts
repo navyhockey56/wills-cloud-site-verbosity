@@ -2,9 +2,9 @@ import { FileReferenceModel } from "../../../../services/models/responses/file-r
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
 export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorElement> {
-  private fileReference : FileReferenceModel;
+  private fileReference: FileReferenceModel;
 
-  constructor(fileReference : FileReferenceModel) {
+  constructor(fileReference: FileReferenceModel) {
     super();
 
     this.fileReference = fileReference;
@@ -14,19 +14,22 @@ export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorE
     return require("./file-reference-list-entry.html").default;
   }
 
-  onVBSComponentAdded() : void {
+  hasEventListeners(): boolean {
+    return true;
+  }
+
+  onVBSComponentAdded(): void {
     this.template.text = `File: ${this.fileReference.simple_file_name} | Type: ${this.fileReference.file_type}`
     this.template.href = this.filePath();
   }
 
   // vbs-event-onclick
-  private onClick(event : MouseEvent) {
+  private onClick(event: MouseEvent) {
     event.preventDefault();
-    console.log("Hello")
     this.router.goTo(this.filePath(), { fileReference: this.fileReference });
   }
 
-  private filePath() : string {
+  private filePath(): string {
     return `/files/${this.fileReference.id}`;
   }
 }
