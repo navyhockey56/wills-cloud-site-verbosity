@@ -17,13 +17,11 @@ export const createEndpoint = (contextPath : string, params?: any) => {
 };
 
 export const toAPIResponse = async <T> (response : Response) : Promise<APIResponse<T>> => {
-  const headers : Headers = response.headers;
-
   return {
     headers: response.headers,
     okay: response.ok,
     data: await response.json()
-  };
+  }
 }
 
 export const toPaginatedResponse = async <T> (response : Response) : Promise<PaginatedAPIResponse<T>> => {

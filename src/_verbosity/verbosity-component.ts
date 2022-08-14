@@ -64,4 +64,8 @@ export abstract class VBSComponent<T extends HTMLElement> implements VBSComponen
   removeChildComponent(childComponent: VBSComponent<HTMLElement>) : void {
     this.dom.removeChildVBSComponent(this, childComponent);
   }
+
+  removeAllChildren() : void {
+    this.dom.removeAllChildren(this);
+  }
 }

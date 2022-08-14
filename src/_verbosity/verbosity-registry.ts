@@ -1,40 +1,40 @@
-import { VerbosityService } from "./verbosity-service";
-import { RedirectGuard } from "./redirect-guard";
-// import { VBSState } from "./veribosity-state";
+import { RegisterableComponent, VBSAppComponent, VBSComponentHydrater } from "./verbosity-app-component";
 
 export class VerbosityRegistry {
-  private serviceVerbosityRegistry : Record<string, VerbosityService>
-  private guardRegister : Record<string, RedirectGuard>
-
-  // private stateRegistry : Record<string, VBSState>;
-
   private callbackRegister : Record<string, any>;
   private callbackGroupRegister: Record<string, any[]>;
 
-  constructor() {
-    this.serviceVerbosityRegistry = {};
-    this.guardRegister = {};
+  private singletonRegistry : Record<string, RegisterableComponent>;
+  private namedRegistry : Record<string, VBSAppComponent>;
+
+  private componentHydrater: VBSComponentHydrater;
+
+  constructor(componentHydrater: VBSComponentHydrater) {
+    this.componentHydrater = componentHydrater;
+
+    this.singletonRegistry = {};
+    this.namedRegistry = {};
+
     this.callbackRegister = {};
     this.callbackGroupRegister = {};
-    // this.stateRegistry = {};
   }
 
-  registerService(service : VerbosityService) : void {
-    this.serviceVerbosityRegistry[service.constructor.name] = service;
-    service.setVerbosityRegistry(this);
+  registerSingleton(component: RegisterableComponent) {
+    this.singletonRegistry[component.constructor.name] = component;
+    this.componentHydrater.hydrateComponent(component);
   }
 
-  getService<T extends VerbosityService>(clazz: any) : T {
-    return this.serviceVerbosityRegistry[clazz.name] as T;
+  getSingleton<T extends RegisterableComponent>(clazz : any) : T {
+    return this.singletonRegistry[clazz.name] as T;
   }
 
-  registerGuard(guard : RedirectGuard) {
-    this.guardRegister[guard.constructor.name] = guard;
-    guard.setVerbosityRegistry(this);
+  registerNamedComponent(key: string, component : VBSAppComponent) {
+    this.namedRegistry[key] = component;
+    this.componentHydrater.hydrateComponent(component);
   }
 
-  getGuard<T extends RedirectGuard>(clazz: any) : T {
-    return this.guardRegister[clazz.name] as T;
+  getNamedComponent<T extends VBSAppComponent>(key: string) : T {
+    return this.namedRegistry[key] as T;
   }
 
   registerCallback(key: string, callback: any) : void {
@@ -65,12 +65,4 @@ export class VerbosityRegistry {
 
     return callbacks as T[];
   }
-
-  // registerState(key: string, state : VBSState) {
-  //   this.stateRegistry[key] = state;
-  // }
-
-  // getState<T extends VBSState>(key: string) : T {
-  //   return this.stateRegistry[key] as T;
-  // }
 }

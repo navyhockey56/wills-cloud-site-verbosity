@@ -1,9 +1,16 @@
-import { VerbosityService } from "../_verbosity/verbosity-service";
+import { VBSAppComponent } from "../_verbosity/verbosity-app-component";
+import { VerbosityRegistry } from "../_verbosity/verbosity-registry";
 import { SessionService } from "./session.service";
 
-export abstract class AbstractAuthenticatedService extends VerbosityService {
+export abstract class AbstractAuthenticatedService implements VBSAppComponent {
+  private registry : VerbosityRegistry;
+
+  setVBSRegistry(registry : VerbosityRegistry) {
+    this.registry = registry;
+  }
+
   protected getSession() : string {
-    const sessionService : SessionService = this.registry.getService(SessionService);
+    const sessionService : SessionService = this.registry.getSingleton(SessionService);
     return sessionService.getSession();
   }
 

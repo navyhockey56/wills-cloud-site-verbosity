@@ -1,10 +1,9 @@
-import { VerbosityService } from "./verbosity-service";
 import { VerbosityDom } from "./verbosity-dom";
-import { RedirectGuard } from "./redirect-guard";
 import { VerbosityRegistry } from "./verbosity-registry";
 import { VerbosityRouter } from "./verbosity-router";
 import { VBSComponentDefinition } from "./component-definition.interface";
 import { VBSComponent } from "./verbosity-component";
+import { RegisterableComponent, VBSComponentHydrater } from "./verbosity-app-component";
 
 interface SimpleMount {
   mountId: string,
@@ -20,8 +19,13 @@ export class VerbosityApp {
 
   constructor() {
     this.simpleMounts = [];
+
+    const hydrater : VBSComponentHydrater = {
+      hydrateComponent: this.hydrateVBSAppComponent.bind(this)
+    };
+
     this.dom = new VerbosityDom(this.hydrateComponent.bind(this));
-    this.registry = new VerbosityRegistry();
+    this.registry = new VerbosityRegistry(hydrater);
     this.router = new VerbosityRouter(this.dom);
   }
 
@@ -31,15 +35,6 @@ export class VerbosityApp {
 
   addRoute(path: string, componentDefintion : VBSComponentDefinition<HTMLElement>) : void {
     this.router.addRoute(path, componentDefintion);
-  }
-
-  registerService(service: VerbosityService) : void {
-    this.registry.registerService(service);
-    service.setRouter(this.router);
-  }
-
-  registerGuard(guard: RedirectGuard) {
-    this.registry.registerGuard(guard);
   }
 
   start() : void {
@@ -53,5 +48,11 @@ export class VerbosityApp {
 
   private hydrateComponent(component: VBSComponent<HTMLElement>) : void {
     component.hydrateComponent(this.dom, this.router, this.registry);
+  }
+
+  private hydrateVBSAppComponent(component : RegisterableComponent) : void {
+    if (component.setVBSDom) component.setVBSDom(this.dom);
+    if (component.setVBSRegistry) component.setVBSRegistry(this.registry);
+    if (component.setVBSRouter) component.setVBSRouter(this.router);
   }
 }

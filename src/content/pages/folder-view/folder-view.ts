@@ -1,7 +1,7 @@
 import { FileReferencesService } from "../../../services/file-references.service";
 import { FolderService } from "../../../services/folder.service";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
-import { PaginatedAPIResponse } from "../../../services/models/responses/api-response";
+import { APIResponse, PaginatedAPIResponse } from "../../../services/models/responses/api-response";
 import { FolderResponse } from "../../../services/models/responses/folder.response";
 import { VBSComponent } from "../../../_verbosity/verbosity-component";
 import { FileReferenceListEntryVBSComponent } from "./components/file-reference-list-entry";
@@ -42,16 +42,20 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
   }
 
   beforeVBSComponentAdded() : void {
-    this.fileReferenceService = this.registry.getService(FileReferencesService);
-    this.folderService = this.registry.getService(FolderService);
+    this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
+    this.folderService = this.registry.getSingleton(FolderService);
 
     this.loadFolder();
   }
 
   private loadFolder() : void {
     if (!this.folder || !this.folder.children_folders) {
-      this.folderService.get(this.folderId).then((folderResponse : FolderResponse) => {
-        this.setFolder(folderResponse);
+      this.folderService.get(this.folderId).then((folderResponse : APIResponse<FolderResponse>) => {
+        if (!folderResponse.okay) {
+          throw Error('Failed to fetch folder');
+        }
+
+        this.setFolder(folderResponse.data);
         this.loadFolder();
       });
 

@@ -139,6 +139,23 @@ export class VerbosityDom {
     this.clearVBSComponentFromDom(childVBSComponent);
   }
 
+  removeAllChildren(parentVBSComponent: VBSComponent<HTMLElement>) : void {
+    const childrenVBSComponents : VBSComponent<HTMLElement>[] = this.componentsMap.get(parentVBSComponent);
+    if (!childrenVBSComponents) return;
+
+    childrenVBSComponents.forEach(childVBSComponent => {
+      const childVBSComponentInfo : VBSComponentInformation = this.componentInfoMap.get(childVBSComponent);
+      this.componentInfoMap.delete(childVBSComponent);
+
+      this.recursiveBeforeVBSComponentRemoved(childVBSComponent);
+      childVBSComponentInfo.mount.removeChild(childVBSComponent.template);
+      this.recursiveAfterVBSComponentRemoved(childVBSComponent);
+      this.clearVBSComponentFromDom(childVBSComponent);
+    })
+
+    this.componentsMap.set(parentVBSComponent, []);
+  }
+
   private hydrateVBSComponent(component : VBSComponent<HTMLElement>) {
     this.componentHydrater(component);
   }

@@ -1,5 +1,6 @@
 import { CallbackGroups } from "../../../constants/callbacks.enum";
 import { SessionService } from "../../../services/session.service";
+import { isPlainLeftClick } from "../../../tools/event.tools";
 import { VBSComponent } from "../../../_verbosity/verbosity-component";
 import { LogoutButton } from "./logout-button";
 
@@ -46,7 +47,7 @@ export class Header extends VBSComponent<HTMLDivElement> {
       this.onSessionClearedCallback
     );
 
-    this.sessionService = this.registry.getService(SessionService);
+    this.sessionService = this.registry.getSingleton(SessionService);
     if (!this.sessionService.hasSession()) return;
 
     this.bindLogoutButton();
@@ -75,8 +76,9 @@ export class Header extends VBSComponent<HTMLDivElement> {
 
   // VBS onclick event
   private goHome(event : MouseEvent) : void {
-    event.preventDefault();
+    if (!isPlainLeftClick(event)) return;
 
+    event.preventDefault();
     this.router.goTo('/');
   }
 }

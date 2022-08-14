@@ -13,7 +13,7 @@ export class LogoutButton extends VBSComponent<HTMLAnchorElement> {
   }
 
   beforeVBSComponentAdded(): void {
-    this.sessionService = this.registry.getService(SessionService);
+    this.sessionService = this.registry.getSingleton(SessionService);
     this.template.href = '/login';
   }
 

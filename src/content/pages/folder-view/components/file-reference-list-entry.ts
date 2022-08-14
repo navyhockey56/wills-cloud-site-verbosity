@@ -1,4 +1,5 @@
 import { FileReferenceModel } from "../../../../services/models/responses/file-reference.response";
+import { isPlainLeftClick } from "../../../../tools/event.tools";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
 export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorElement> {
@@ -25,6 +26,8 @@ export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorE
 
   // vbs-event-onclick
   private onClick(event: MouseEvent) {
+    if (!isPlainLeftClick(event)) return;
+
     event.preventDefault();
     this.router.goTo(this.filePath(), { fileReference: this.fileReference });
   }

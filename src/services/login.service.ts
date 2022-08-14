@@ -1,12 +1,10 @@
-import { Callbacks } from "../constants/callbacks.enum";
-import { VerbosityService } from "../_verbosity/verbosity-service";
-import { MessageCategory, NotificationModel } from "./models/general/notification.model";
 import { LoginRequest } from "./models/requests/login.request";
-import { SessionService } from "./session.service";
-import { createEndpoint } from "./tooling/request-helpers";
+import { APIResponse } from "./models/responses/api-response";
+import { LoginResponse } from "./models/responses/login.response";
+import { createEndpoint, toAPIResponse } from "./tooling/request-helpers";
 
-export class LoginService extends VerbosityService {
-  async login(loginRequest: LoginRequest) : Promise<void> {
+export class LoginService {
+  async login(loginRequest: LoginRequest) : Promise<APIResponse<LoginResponse>> {
     const response : Response = await fetch(createEndpoint('login'), {
       method: 'POST',
       headers: {
@@ -15,37 +13,6 @@ export class LoginService extends VerbosityService {
       body: JSON.stringify(loginRequest)
     });
 
-    if (!response.ok) {
-      this.notifyLoginFailure();
-      return null;
-    }
-
-    response.json().then(json => {
-      const sessionService : SessionService = this.registry.getService(SessionService)
-      sessionService.setSession(json['token']);
-      this.notifyLoginSuccess();
-
-      this.router.goTo('/');
-    });
-  }
-
-  private notifyLoginSuccess() : void {
-    const notificationCallback : (notification : NotificationModel) => void =
-      this.registry.getCallback(Callbacks.ADD_NOTIFICATION.toString());
-
-    notificationCallback({
-      message: 'Login Success',
-      messageCategory: MessageCategory.SUCCESS
-    });
-  }
-
-  private notifyLoginFailure() : void {
-    const notificationCallback : (notification : NotificationModel) => void =
-      this.registry.getCallback(Callbacks.ADD_NOTIFICATION.toString());
-
-    notificationCallback({
-      message: 'Login Failed',
-      messageCategory: MessageCategory.ERROR
-    });
+    return toAPIResponse(response);
   }
 }

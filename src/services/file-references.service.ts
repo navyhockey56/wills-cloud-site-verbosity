@@ -7,7 +7,7 @@ import { createEndpoint, toPaginatedResponse } from "./tooling/request-helpers";
 
 export class FileReferencesService extends AbstractAuthenticatedService {
 
-  async get(fileReferenceId: number, includeDownloadUrl: boolean) : Promise<FileReferenceModel> {
+  async get(fileReferenceId: number, includeDownloadUrl: boolean) : Promise<APIResponse<FileReferenceModel>> {
     const endpoint = createEndpoint(`file_references/${fileReferenceId}`, {
       include_download_url: includeDownloadUrl
     });

@@ -1,16 +1,26 @@
 import { CallbackGroups } from "../constants/callbacks.enum";
-import { VerbosityService } from "../_verbosity/verbosity-service";
+import { VBSAppComponent } from "../_verbosity/verbosity-app-component";
+import { VerbosityRegistry } from "../_verbosity/verbosity-registry";
+import { VerbosityRouter } from "../_verbosity/verbosity-router";
 
 const SESSION_KEY = 'session';
 
-export class SessionService extends VerbosityService {
+export class SessionService implements VBSAppComponent {
 
   private storage : Storage;
+  private registry : VerbosityRegistry;
+  private router : VerbosityRouter;
 
   constructor() {
-    super();
-
     this.storage = window.localStorage;
+  }
+
+  setVBSRegistry(registry: VerbosityRegistry): void {
+    this.registry = registry;
+  }
+
+  setVBSRouter(router: VerbosityRouter): void {
+    this.router = router;
   }
 
   getSession(): string | null {

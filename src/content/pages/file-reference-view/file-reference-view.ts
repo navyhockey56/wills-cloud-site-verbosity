@@ -41,9 +41,13 @@ export class FileReferenceView extends VBSComponent<HTMLElement> {
     this.populateTemplateWithFileData();
 
     if (!this.fileReference || !this.fileReference.download_url) {
-      const fileService : FileReferencesService = this.registry.getService(FileReferencesService);
+      const fileService : FileReferencesService = this.registry.getSingleton(FileReferencesService);
       fileService.get(this.fileId, true).then((fileReference) => {
-        this.setFileReference(fileReference);
+        if (!fileReference.okay) {
+          throw Error('Unable to fetch file reference');
+        }
+
+        this.setFileReference(fileReference.data);
         this.populateTemplateWithFileData();
       });
     }

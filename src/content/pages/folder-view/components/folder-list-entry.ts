@@ -1,4 +1,5 @@
 import { FolderResponse } from "../../../../services/models/responses/folder.response";
+import { isPlainLeftClick } from "../../../../tools/event.tools";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
 export class FoldersListEntryVBSComponent extends VBSComponent<HTMLAnchorElement> {
@@ -25,6 +26,8 @@ export class FoldersListEntryVBSComponent extends VBSComponent<HTMLAnchorElement
 
   // vbs-event-onclick
   private onClick(event : MouseEvent) {
+    if (!isPlainLeftClick(event)) return;
+
     event.preventDefault();
     this.router.goTo(this.folderPath(), { folder: this.folder });
   }

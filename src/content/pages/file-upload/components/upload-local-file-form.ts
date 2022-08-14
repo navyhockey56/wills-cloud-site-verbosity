@@ -25,7 +25,7 @@ export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
   }
 
   beforeVBSComponentAdded(): void {
-    this.fileReferenceService = this.registry.getService(FileReferencesService);
+    this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
   }
 
   // VBS onclick event

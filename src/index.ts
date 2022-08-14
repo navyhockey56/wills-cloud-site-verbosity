@@ -12,6 +12,7 @@ import { IsNotLoggedInGuard } from "./guards/is-not-logged-in-guard";
 import { FileReferenceView } from "./content/pages/file-reference-view/file-reference-view";
 import { FileUploadPage } from "./content/pages/file-upload/file-upload";
 import { NotificationPanel } from "./content/components/notifications/notification-panel";
+import { SearchPage } from "./content/pages/search/search";
 
 require('./index.css');
 
@@ -23,28 +24,34 @@ require('./content/styles/panel.css');
 
 const APP = new VerbosityApp();
 
-APP.registerService(new SessionService);
-APP.registerService(new LoginService);
-APP.registerService(new FileReferencesService);
-APP.registerService(new FolderService);
+APP.registry.registerSingleton(new LoginService);
 
-APP.registerGuard(new IsLoggedInGuard);
-APP.registerGuard(new IsNotLoggedInGuard);
+APP.registry.registerSingleton(new SessionService);
+APP.registry.registerSingleton(new FileReferencesService);
+APP.registry.registerSingleton(new FolderService);
+
+APP.registry.registerSingleton(new IsLoggedInGuard);
+APP.registry.registerSingleton(new IsNotLoggedInGuard);
 
 APP.addRoute('/', {
   instance: () => new HomePage(),
-  guard: APP.registry.getGuard(IsNotLoggedInGuard)
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
 });
 
 APP.addRoute('/login', {
   instance: () => new LoginPage(),
-  guard: APP.registry.getGuard(IsLoggedInGuard)
+  guard: APP.registry.getSingleton(IsLoggedInGuard)
 });
 
 APP.addRoute('/upload', {
   instance: () => new FileUploadPage(),
-  guard: APP.registry.getGuard(IsNotLoggedInGuard)
-})
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+});
+
+APP.addRoute('/search', {
+  instance: () => new SearchPage(),
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+});
 
 APP.addRoute('/files/:fileId', {
   instance: (params : any) => {
@@ -58,7 +65,7 @@ APP.addRoute('/files/:fileId', {
 
     return fileView;
   },
-  guard: APP.registry.getGuard(IsNotLoggedInGuard)
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
 })
 
 APP.addRoute('/folders/:folderId', {
@@ -73,7 +80,7 @@ APP.addRoute('/folders/:folderId', {
 
     return folderView;
   },
-  guard: APP.registry.getGuard(IsNotLoggedInGuard)
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
 })
 
 APP.addSimpleMount('header-mount', new Header());

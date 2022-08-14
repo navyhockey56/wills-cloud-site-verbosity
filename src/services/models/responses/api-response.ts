@@ -1,7 +1,7 @@
 export interface APIResponse<T> {
   headers: Headers;
   okay: boolean;
-  data: T;
+  data?: T;
 }
 
 export interface PaginatedAPIResponse<T> extends APIResponse<T> {
