@@ -1,4 +1,4 @@
-import { FileReferenceModel } from "../../../../services/models/responses/file-reference.response";
+import { FileReferenceModel, prettyFileSize } from "../../../../services/models/responses/file-reference.response";
 import { isPlainLeftClick } from "../../../../tools/event.tools";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
@@ -20,7 +20,7 @@ export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorE
   }
 
   onVBSComponentAdded(): void {
-    this.template.text = `File: ${this.fileReference.simple_file_name} | Type: ${this.fileReference.file_type}`
+    this.template.text = `File: ${this.fileReference.simple_file_name} | Type: ${this.fileReference.file_type} | Size: ${prettyFileSize(this.fileReference.bytes)}`
     this.template.href = this.filePath();
   }
 

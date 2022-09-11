@@ -1,6 +1,7 @@
 import { Callbacks } from "../../../../constants/callbacks.enum";
 import { FileReferencesService } from "../../../../services/file-references.service";
 import { NotificationModel, MessageCategory } from "../../../../services/models/general/notification.model";
+import { APIResponse } from "../../../../services/models/responses/api-response";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
 export class UploadRemoteFileForm extends VBSComponent<HTMLElement> {
@@ -44,14 +45,21 @@ export class UploadRemoteFileForm extends VBSComponent<HTMLElement> {
     this.fileReferenceService.uploadRemoteFile({
       file_name: fileName,
       download_link: fileUrl
-    }).then(this.onUploadSuccess.bind(this));
+    }).then(this.onUploadResponse.bind(this));
   }
 
-  private onUploadSuccess() : void {
-    this.sendNotification({
-      message: 'File Upload has Begun',
-      messageCategory: MessageCategory.INFO
-    });
+  private onUploadResponse(response : APIResponse<void>) : void {
+    if (!response.okay) {
+      this.sendNotification({
+        message: 'An error occurred when uploading your file',
+        messageCategory: MessageCategory.ERROR
+      });
+    } else {
+      this.sendNotification({
+        message: 'File Upload has Begun',
+        messageCategory: MessageCategory.INFO
+      });
+    }
   }
 
   private sendNotification(notification: NotificationModel) : void {

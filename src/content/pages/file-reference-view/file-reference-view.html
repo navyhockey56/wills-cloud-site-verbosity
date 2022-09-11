@@ -9,12 +9,24 @@
       <label><strong>File Type:</strong></label>
       <p data-vbs-assign="fileTypeElement"></p>
     </span>
+
+    <span>
+      <label><strong>Source:</strong></label>
+      <p data-vbs-assign="sourceElement"></p>
+    </span>
+
+    <span>
+      <label><strong>Size:</strong></label>
+      <p data-vbs-assign="sizeElement"></p>
+    </span>
   </div>
 
   <template data-vbs-assign="fileReferenceViewTemplate"></template>
 
   <div class="padded-1">
-    <a class="button margin-quarter" data-vbs-assign="downloadFileButton">Download</button>
-    <a class="button margin-quarter" data-vbs-event-onclick="viewFile">View</a>
+    <a class="button margin-quarter" style="display: inline-block;" data-vbs-assign="downloadFileButton">Download</a>
+    <a class="button margin-quarter" style="display: inline-block;" data-vbs-event-onclick="viewFile">View</a>
+    <a class="button margin-quarter" style="display: inline-block;" data-vbs-assign="editFileButton">Edit</a>
+    <a class="button margin-quarter" style="display: inline-block;" data-vbs-event-onclick="deleteFileButtonClick">Delete</a>
   </div>
 </div>

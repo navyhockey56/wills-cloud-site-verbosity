@@ -13,6 +13,8 @@ import { FileReferenceView } from "./content/pages/file-reference-view/file-refe
 import { FileUploadPage } from "./content/pages/file-upload/file-upload";
 import { NotificationPanel } from "./content/components/notifications/notification-panel";
 import { SearchPage } from "./content/pages/search/search";
+import { EditFileReferencePage } from "./content/pages/edit-file-reference/edit-file-reference";
+import { PopUpFrame } from "./content/components/pop-up/pop-up";
 
 require('./index.css');
 
@@ -68,6 +70,21 @@ APP.addRoute('/files/:fileId', {
   guard: APP.registry.getSingleton(IsNotLoggedInGuard)
 })
 
+APP.addRoute('/files/:fileId/edit', {
+  instance: (params : any) => {
+    const fileView = new EditFileReferencePage();
+
+    if (params.fileReference) {
+      fileView.setFileReference(params.fileReference)
+    } else if (params.fileId) {
+      fileView.setFileId(params.fileId)
+    }
+
+    return fileView;
+  },
+  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+})
+
 APP.addRoute('/folders/:folderId', {
   instance: (params : any) => {
     const folderView = new FolderViewPage();
@@ -85,5 +102,6 @@ APP.addRoute('/folders/:folderId', {
 
 APP.addSimpleMount('header-mount', new Header());
 APP.addSimpleMount('notification-mount', new NotificationPanel());
+APP.addSimpleMount('pop-up-mount', new PopUpFrame());
 
 APP.start();

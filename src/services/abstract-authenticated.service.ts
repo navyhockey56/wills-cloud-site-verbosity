@@ -1,6 +1,8 @@
 import { VBSAppComponent } from "../_verbosity/verbosity-app-component";
 import { VerbosityRegistry } from "../_verbosity/verbosity-registry";
+import { APIResponse, PaginatedAPIResponse } from "./models/responses/api-response";
 import { SessionService } from "./session.service";
+import { toAPIResponse, toPaginatedResponse } from "./tooling/request-helpers";
 
 export abstract class AbstractAuthenticatedService implements VBSAppComponent {
   private registry : VerbosityRegistry;
@@ -19,5 +21,25 @@ export abstract class AbstractAuthenticatedService implements VBSAppComponent {
     if (contentType) headers['Content-Type'] = contentType;
 
     return headers;
+  }
+
+  protected convertResponse<T>(response : Response, noContent?: boolean) : Promise<APIResponse<T>> {
+    this.checkResponseForUnauthorized(response);
+
+    return toAPIResponse(response, noContent);
+  }
+
+  protected convertPaginatedResponse<T>(response : Response) : Promise<PaginatedAPIResponse<T>> {
+    this.checkResponseForUnauthorized(response);
+
+    return toPaginatedResponse(response);
+  }
+
+  private checkResponseForUnauthorized(response : Response) {
+    if (response.status !== 401) return;
+
+    const sessionService : SessionService = this.registry.getSingleton(SessionService);
+    sessionService.clearSession();
+    throw Error('Unauthorized');
   }
 }

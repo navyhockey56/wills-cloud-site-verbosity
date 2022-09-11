@@ -1,16 +1,20 @@
 import { Callbacks } from "../../../../constants/callbacks.enum";
 import { FileReferencesService } from "../../../../services/file-references.service";
 import { NotificationModel, MessageCategory } from "../../../../services/models/general/notification.model";
+import { APIResponse } from "../../../../services/models/responses/api-response";
 import { VBSComponent } from "../../../../_verbosity/verbosity-component";
 
 export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private selectedFile : File;
 
+  private isUploadingFile : boolean = false;
+
   // VBS Assignments
   private selectedFileNameElement : HTMLSpanElement;
   private fileInput : HTMLInputElement;
   private fileNameInput : HTMLInputElement;
+  private uploadFileButton : HTMLAnchorElement;
 
   readTemplate(): string {
     return require('./upload-local-file-form.html').default;
@@ -39,8 +43,18 @@ export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
     this.selectedFile = file;
   }
 
+  // VBS onclick event
   private uploadFile(event : MouseEvent) : void {
     event.preventDefault();
+
+    if (this.isUploadingFile) {
+      this.sendNotification({
+        message: 'You are already uploading a file',
+        messageCategory: MessageCategory.ERROR
+      });
+
+      return;
+    }
 
     const fileName = this.getFileName();
     if (!this.selectedFile || !fileName || fileName.length === 0) {
@@ -52,15 +66,28 @@ export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
       return;
     }
 
+    this.isUploadingFile = true;
+    this.uploadFileButton.textContent = 'Uploading...'
+
     this.fileReferenceService.uploadLocalFile(fileName, this.selectedFile)
-      .then(this.onUploadSuccess.bind(this));
+      .then(this.onUploadResponse.bind(this));
   }
 
-  private onUploadSuccess() : void {
-    this.sendNotification({
-      message: 'File Upload has Begun',
-      messageCategory: MessageCategory.INFO
-    });
+  private onUploadResponse(response : APIResponse<void>) : void {
+    this.isUploadingFile = false;
+    this.uploadFileButton.textContent = 'Begin Upload'
+
+    if (!response.okay) {
+      this.sendNotification({
+        message: 'An error occurred when uploading your file',
+        messageCategory: MessageCategory.ERROR
+      });
+    } else {
+      this.sendNotification({
+        message: 'File Upload has Begun',
+        messageCategory: MessageCategory.INFO
+      });
+    }
   }
 
   private sendNotification(notification: NotificationModel) : void {

@@ -1,5 +1,7 @@
 export enum Callbacks {
-  ADD_NOTIFICATION
+  ADD_NOTIFICATION,
+  ADD_POPUP,
+  REMOVE_POPUP
 }
 
 export enum CallbackGroups {

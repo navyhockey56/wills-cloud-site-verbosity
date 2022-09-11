@@ -2,7 +2,6 @@ import { VerbosityDom } from "./verbosity-dom";
 import { VBSComponentDefinition } from "./component-definition.interface";
 import { VBSComponent } from "./verbosity-component";
 
-
 interface PathMatcher {
   matchesPath(path: string) : boolean;
   extractParamatersFromPath?(path: string) : Record<string, any>;
@@ -26,7 +25,8 @@ class DynamicPath implements PathMatcher {
 
   constructor(path: string) {
     this.parameterizedIndicesMap = [];
-    this.pathParts = path.split('/');
+    this.pathParts = this.splitPath(path);
+
     this.pathParts.forEach((pathPart: string, index: number) => {
       if (pathPart.startsWith(':')) {
         this.parameterizedIndicesMap[index] = pathPart.slice(1, pathPart.length);
@@ -37,17 +37,17 @@ class DynamicPath implements PathMatcher {
   }
 
   matchesPath(path: string): boolean {
-    const pathParts : string[] = path.split('/');
+    const pathParts : string[] = this.splitPath(path);
     const matchingParts = pathParts.filter((pathPart: string, index: number) => {
       return this.parameterizedIndicesMap[index] || this.pathParts[index] === pathPart;
     })
 
-    return matchingParts.length === this.pathParts.length;
+    return matchingParts.length === pathParts.length;
   }
 
   extractParamatersFromPath(path: string): Record<string, string> {
     const extractedParameters : Record<string, string> = {};
-    const pathParts : string[] = path.split('/');
+    const pathParts : string[] = this.splitPath(path);
 
     pathParts.forEach((pathPart: string, index: number) => {
       const parameterName : string = this.parameterizedIndicesMap[index];
@@ -57,6 +57,12 @@ class DynamicPath implements PathMatcher {
     });
 
     return extractedParameters;
+  }
+
+  private splitPath(path: string) : string[] {
+    if (!path) return [];
+
+    return path.split('/').filter(part => !!part);
   }
 }
 

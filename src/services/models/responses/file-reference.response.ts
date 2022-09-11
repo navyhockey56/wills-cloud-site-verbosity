@@ -4,8 +4,9 @@ export interface FileReferenceModel {
   simple_file_name: string;
   file_location: string;
   file_type: string;
-  tags?: string[];
+  original_source: string;
   download_url?: string;
+  bytes: string
 }
 
 export const isImageFile = (fileReference : FileReferenceModel) : boolean => {
@@ -13,9 +14,46 @@ export const isImageFile = (fileReference : FileReferenceModel) : boolean => {
 };
 
 export const isAudioFile = (fileReference : FileReferenceModel) : boolean => {
-  return fileReference.file_type.includes('mp3');
+  return !!['audio', 'mp3'].find((type) => fileReference.file_type.includes(type));
 }
 
 export const isVideoFile = (fileReference : FileReferenceModel) : boolean => {
-  return fileReference.file_type.includes('video') || fileReference.file_type.includes('mp4');
+  return !!['video', 'mp4'].find((type) => fileReference.file_type.includes(type));
+}
+
+export const isTextFile = (fileReference : FileReferenceModel) : boolean => {
+  return !!['text', 'txt'].find((type) => fileReference.file_type.includes(type))
+}
+
+export const isPdfFile = (fileReference : FileReferenceModel) : boolean => {
+  return !!['pdf'].find((type) => fileReference.file_type.includes(type))
+}
+
+export const prettyFileSize = (bytes : string) : string => {
+  const twoDecimalPlaces = (value : number) : string => {
+    const valueParts = value.toString().split('.');
+    if (valueParts.length == 1) {
+      return valueParts[0];
+    }
+
+    return `${valueParts[0]}.${valueParts[1].slice(0, 2)}`
+  }
+
+  const bytesAsInt = parseInt(bytes);
+  if (bytesAsInt < 1024) {
+    return `${twoDecimalPlaces(bytesAsInt)} b`
+  }
+
+  const kilobytes = bytesAsInt / 1024;
+  if (kilobytes < 1024) {
+    return `${twoDecimalPlaces(kilobytes)} kb`
+  }
+
+  const megabytes = bytesAsInt / (1024 * 1024);
+  if (megabytes < 1024) {
+    return `${twoDecimalPlaces(megabytes)} mb`;
+  }
+
+  const gigabytes = bytesAsInt / (1024 * 1024 * 1024);
+  return `${twoDecimalPlaces(gigabytes)} gb`;
 }

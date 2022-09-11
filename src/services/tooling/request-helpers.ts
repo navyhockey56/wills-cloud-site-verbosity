@@ -16,12 +16,17 @@ export const createEndpoint = (contextPath : string, params?: any) => {
   return `/api/v1/${contextPath}?` + toSearchParams(params).toString();
 };
 
-export const toAPIResponse = async <T> (response : Response) : Promise<APIResponse<T>> => {
-  return {
+export const toAPIResponse = async <T> (response : Response, noContent: boolean = false) : Promise<APIResponse<T>> => {
+  const baseResponse : APIResponse<T> = {
     headers: response.headers,
-    okay: response.ok,
-    data: await response.json()
+    okay: response.ok
   }
+
+  if (!noContent) {
+    baseResponse.data = await response.json();
+  }
+
+  return baseResponse;
 }
 
 export const toPaginatedResponse = async <T> (response : Response) : Promise<PaginatedAPIResponse<T>> => {

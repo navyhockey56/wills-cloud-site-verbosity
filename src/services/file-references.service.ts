@@ -3,7 +3,8 @@ import { FileReferencesRequest } from "./models/requests/file-references.request
 import { UploadRemoteFileRequest } from "./models/requests/upload-remote-file.request";
 import { FileReferenceModel } from "./models/responses/file-reference.response";
 import { APIResponse, PaginatedAPIResponse } from "./models/responses/api-response";
-import { createEndpoint, toPaginatedResponse } from "./tooling/request-helpers";
+import { createEndpoint } from "./tooling/request-helpers";
+import { UpdateFileReferenceRequest } from "./models/requests/update.file-reference.request";
 
 export class FileReferencesService extends AbstractAuthenticatedService {
 
@@ -17,7 +18,7 @@ export class FileReferencesService extends AbstractAuthenticatedService {
       headers: this.basicHeaders(),
     });
 
-    return response.json();
+    return this.convertResponse(response);
   }
 
   async list(params: FileReferencesRequest = {}) : Promise<PaginatedAPIResponse<FileReferenceModel[]>> {
@@ -27,10 +28,31 @@ export class FileReferencesService extends AbstractAuthenticatedService {
       headers: this.basicHeaders(),
     });
 
-    return toPaginatedResponse(response);
+    return this.convertPaginatedResponse(response);
   }
 
-  async uploadRemoteFile(request : UploadRemoteFileRequest) : Promise<Response> {
+  async update(fileId: number, request: UpdateFileReferenceRequest) : Promise<APIResponse<FileReferenceModel>> {
+    const endpoint = createEndpoint(`file_references/${fileId}`);
+    const response : Response = await fetch(endpoint, {
+      method: 'PUT',
+      headers: this.basicHeaders('application/json'),
+      body: JSON.stringify(request)
+    });
+
+    return this.convertResponse(response);
+  }
+
+  async delete(fileId: number) : Promise<APIResponse<void>> {
+    const endpoint = createEndpoint(`file_references/${fileId}`);
+    const response : Response = await fetch(endpoint, {
+      method: 'DELETE',
+      headers: this.basicHeaders('application/json'),
+    });
+
+    return this.convertResponse(response, true);
+  }
+
+  async uploadRemoteFile(request : UploadRemoteFileRequest) : Promise<APIResponse<void>> {
     const endpoint = createEndpoint('file_references/download_from');
     const response : Response = await fetch(endpoint, {
       method: 'POST',
@@ -38,10 +60,10 @@ export class FileReferencesService extends AbstractAuthenticatedService {
       body: JSON.stringify(request)
     });
 
-    return response;
+    return this.convertResponse(response, true);
   }
 
-  async uploadLocalFile(fileName: string, file: File) : Promise<Response> {
+  async uploadLocalFile(fileName: string, file: File) : Promise<APIResponse<void>> {
     const payload = new FormData();
     payload.append("file_name", fileName);
     payload.append("file_type", file.type);
@@ -54,6 +76,6 @@ export class FileReferencesService extends AbstractAuthenticatedService {
       body: payload
     });
 
-    return response;
+    return this.convertResponse(response, true);
   }
 }

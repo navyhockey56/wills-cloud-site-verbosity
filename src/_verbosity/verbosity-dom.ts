@@ -1,5 +1,3 @@
-import { VerbosityRegistry } from "./verbosity-registry";
-import { VerbosityRouter } from "./verbosity-router";
 import { VBSComponent } from "./verbosity-component";
 import { TemplateLoader } from "./template-loader";
 
@@ -57,6 +55,17 @@ export class VerbosityDom {
     component.onVBSComponentAdded();
 
     return template;
+  }
+
+  replaceComponentWithElement(
+    component: VBSComponent<HTMLElement>,
+    element : HTMLElement
+  ) {
+    this.recursiveBeforeVBSComponentRemoved(component);
+    const parentElement = component.template.parentElement;
+    parentElement.replaceChild(element, component.template);
+    this.recursiveAfterVBSComponentRemoved(component);
+    this.clearVBSComponentFromDom(component);
   }
 
   replaceVBSComponent<T extends HTMLElement>(

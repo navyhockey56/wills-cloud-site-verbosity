@@ -23,6 +23,7 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
   // vbs-assign Fields:
   private filesMount : HTMLSpanElement;
   private foldersMount : HTMLSpanElement;
+  private folderPathElement : HTMLParagraphElement;
 
   hasAssignments(): boolean {
     return true;
@@ -61,6 +62,8 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
 
       return;
     }
+
+    this.folderPathElement.textContent = `Current Folder: ${this.folder.path}`;
 
     this.folder.children_folders.forEach(this.attachChildFolder.bind(this));
     this.loadFiles();
