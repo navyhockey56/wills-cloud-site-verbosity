@@ -1,26 +1,19 @@
 import { CallbackGroups } from "../../../constants/callbacks.enum";
 import { SessionService } from "../../../services/session.service";
 import { isPlainLeftClick } from "../../../tools/event.tools";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 import { LogoutButton } from "./logout-button";
 
-export class Header extends VBSComponent<HTMLDivElement> {
+export class Header extends AbstractTemplate<HTMLDivElement> {
   private sessionService : SessionService;
 
   // VBS Assignments
   private logoutButtonMount : HTMLElement;
-  private logoutButtonVBSComponent: LogoutButton;
+  private logoutButtonVerbosityTemplate: LogoutButton;
   private homeLogoElement : HTMLAnchorElement;
 
   private onSessionSetCallback : () => void;
   private onSessionClearedCallback : () => void;
-
-  constructor() {
-    super();
-
-    this.onSessionSetCallback = this.bindLogoutButton.bind(this);
-    this.onSessionClearedCallback = this.unbindLogoutButton.bind(this);
-  }
 
   readTemplate(): string {
     return require('./header.html').default;
@@ -34,7 +27,10 @@ export class Header extends VBSComponent<HTMLDivElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
+    this.onSessionSetCallback = this.bindLogoutButton.bind(this);
+    this.onSessionClearedCallback = this.unbindLogoutButton.bind(this);
+
     this.homeLogoElement.href = '/';
 
     this.registry.registerWithCallbackGroup(
@@ -53,7 +49,7 @@ export class Header extends VBSComponent<HTMLDivElement> {
     this.bindLogoutButton();
   }
 
-  beforeVBSComponentRemoved(): void {
+  beforeTemplateRemoved(): void {
     this.registry.unregisterWithCallbackGroup(
       CallbackGroups.ON_SESSION_SET.toString(),
       this.onSessionSetCallback
@@ -66,12 +62,12 @@ export class Header extends VBSComponent<HTMLDivElement> {
   }
 
   private bindLogoutButton() : void {
-    this.logoutButtonVBSComponent = new LogoutButton();
-    this.appendChildToMount(this.logoutButtonMount, this.logoutButtonVBSComponent);
+    this.logoutButtonVerbosityTemplate = new LogoutButton();
+    this.appendChildTemplateToElement(this.logoutButtonMount, this.logoutButtonVerbosityTemplate);
   }
 
   private unbindLogoutButton() : void {
-    this.dom.removeChildVBSComponent(this, this.logoutButtonVBSComponent)
+    this.removeChildComponent(this.logoutButtonVerbosityTemplate)
   }
 
   // VBS onclick event

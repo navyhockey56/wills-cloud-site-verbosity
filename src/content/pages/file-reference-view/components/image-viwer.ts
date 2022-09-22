@@ -1,6 +1,6 @@
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 
-export class ImageViewer extends VBSComponent<HTMLElement> {
+export class ImageViewer extends AbstractTemplate<HTMLElement> {
   private imageUrl : string;
 
   // VBS Assignments
@@ -20,7 +20,7 @@ export class ImageViewer extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.imageElement.src = this.imageUrl;
   }
 }

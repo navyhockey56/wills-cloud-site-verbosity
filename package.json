@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "PORT=3000 NODE_ENV=development mode=development webpack serve",
-    "prod": "NODE_ENV=production mode=production webpack && cp public/* dist/",
+    "prod": "NODE_ENV=production mode=production webpack && cp public/* dist/ && cp src/assets/images/* dist/",
     "clean": "rm -rf dist/"
   },
   "author": "Will Dengler",
@@ -17,6 +17,7 @@
     "html-loader": "^4.1.0",
     "html-webpack-plugin": "^5.5.0",
     "path": "^0.12.7",
+    "raw-loader": "^4.0.2",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
@@ -24,5 +25,9 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.9.3",
     "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "verbosity": "file:../../Verbosity/verbosity",
+    "verbosity-dom": "file:../../Verbosity/verbosity-dom"
   }
 }

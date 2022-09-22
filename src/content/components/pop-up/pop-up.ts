@@ -1,10 +1,9 @@
 import { Callbacks } from "../../../constants/callbacks.enum";
 import { PopUpModel } from "../../../services/models/general/pop-up.model";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 import { PopUpContent } from "./components/pop-up-content";
 
-export class PopUpFrame extends VBSComponent<HTMLElement> {
-
+export class PopUpFrame extends AbstractTemplate<HTMLElement> {
   private currentPopUp : PopUpContent;
 
   // VBS Assignmnets
@@ -18,7 +17,7 @@ export class PopUpFrame extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.registry.registerCallback(
       Callbacks.ADD_POPUP.toString(),
       this.addPopUp.bind(this)
@@ -32,10 +31,10 @@ export class PopUpFrame extends VBSComponent<HTMLElement> {
 
   private addPopUp(popUpModel: PopUpModel) {
     this.currentPopUp = new PopUpContent(popUpModel);
-    this.dom.replaceMount(this.popUpContentMount, this.currentPopUp);
+    this.dom.replaceElementWithTemplate(this.popUpContentMount, this.currentPopUp);
   }
 
   private removePopUp() {
-    this.dom.replaceComponentWithElement(this.currentPopUp, this.popUpContentMount);
+    this.dom.replaceTemplateWithElement(this.currentPopUp, this.popUpContentMount);
   }
 }

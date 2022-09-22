@@ -1,13 +1,12 @@
-import { VBSAppComponent } from "../_verbosity/verbosity-app-component";
-import { VerbosityRegistry } from "../_verbosity/verbosity-registry";
+import { VerbosityRegistry } from "verbosity";
 import { APIResponse, PaginatedAPIResponse } from "./models/responses/api-response";
 import { SessionService } from "./session.service";
 import { toAPIResponse, toPaginatedResponse } from "./tooling/request-helpers";
 
-export abstract class AbstractAuthenticatedService implements VBSAppComponent {
-  private registry : VerbosityRegistry;
+export abstract class AbstractAuthenticatedService {
+  private registry! : VerbosityRegistry;
 
-  setVBSRegistry(registry : VerbosityRegistry) {
+  constructor(registry : VerbosityRegistry) {
     this.registry = registry;
   }
 

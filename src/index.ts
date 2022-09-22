@@ -1,8 +1,9 @@
+import { VerbosityApp } from 'verbosity';
+
 import { HomePage } from "./content/pages/home/home";
 import { FileReferencesService } from "./services/file-references.service";
 import { LoginService } from "./services/login.service";
 import { SessionService } from "./services/session.service";
-import { VerbosityApp } from "./_verbosity/verbosity-app";
 import { LoginPage } from "./content/pages/login/login";
 import { Header } from "./content/components/header/header";
 import { FolderService } from "./services/folder.service";
@@ -17,42 +18,53 @@ import { EditFileReferencePage } from "./content/pages/edit-file-reference/edit-
 import { PopUpFrame } from "./content/components/pop-up/pop-up";
 
 require('./index.css');
-
 require('./content/styles/basic.css');
 require('./content/styles/button.css');
+require('./content/styles/field.css');
+require('./content/styles/input.css');
+require('./content/styles/label.css');
 require('./content/styles/logo.css');
 require('./content/styles/notification.css');
 require('./content/styles/panel.css');
 
 const APP = new VerbosityApp();
 
+APP.setTemplateHydrater((template) => {
+  // Inject the dom, registry, and router into the template
+  const simpleTemplate = template as any;
+  simpleTemplate.dom = APP.dom;
+  simpleTemplate.registry = APP.registry;
+  simpleTemplate.router = APP.router;
+});
+
 APP.registry.registerSingleton(new LoginService);
 
-APP.registry.registerSingleton(new SessionService);
-APP.registry.registerSingleton(new FileReferencesService);
-APP.registry.registerSingleton(new FolderService);
+const sessionService = new SessionService(APP.registry, APP.router);
+APP.registry.registerSingleton(sessionService);
+APP.registry.registerSingleton(new FileReferencesService(APP.registry));
+APP.registry.registerSingleton(new FolderService(APP.registry));
 
-APP.registry.registerSingleton(new IsLoggedInGuard);
-APP.registry.registerSingleton(new IsNotLoggedInGuard);
+const isLoggedInGuard = new IsLoggedInGuard(sessionService);
+const isNotLoggedInGuard = new IsNotLoggedInGuard(sessionService);
 
 APP.addRoute('/', {
   instance: () => new HomePage(),
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 });
 
 APP.addRoute('/login', {
   instance: () => new LoginPage(),
-  guard: APP.registry.getSingleton(IsLoggedInGuard)
+  guard: isLoggedInGuard
 });
 
 APP.addRoute('/upload', {
   instance: () => new FileUploadPage(),
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 });
 
 APP.addRoute('/search', {
   instance: () => new SearchPage(),
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 });
 
 APP.addRoute('/files/:fileId', {
@@ -67,7 +79,7 @@ APP.addRoute('/files/:fileId', {
 
     return fileView;
   },
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 })
 
 APP.addRoute('/files/:fileId/edit', {
@@ -82,7 +94,7 @@ APP.addRoute('/files/:fileId/edit', {
 
     return fileView;
   },
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 })
 
 APP.addRoute('/folders/:folderId', {
@@ -97,7 +109,7 @@ APP.addRoute('/folders/:folderId', {
 
     return folderView;
   },
-  guard: APP.registry.getSingleton(IsNotLoggedInGuard)
+  guard: isNotLoggedInGuard
 })
 
 APP.addSimpleMount('header-mount', new Header());

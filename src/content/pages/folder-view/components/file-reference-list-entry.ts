@@ -1,9 +1,14 @@
-import { FileReferenceModel, prettyFileSize } from "../../../../services/models/responses/file-reference.response";
+import { Icons } from "../../../../constants/icons.enum";
+import { FileReferenceModel, isAudioFile, isImageFile, isVideoFile, prettyFileSize } from "../../../../services/models/responses/file-reference.response";
 import { isPlainLeftClick } from "../../../../tools/event.tools";
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
+import { IconTemplate } from "../../../components/icon/icon-template";
 
-export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorElement> {
+export class FileReferenceListEntry extends AbstractTemplate<HTMLAnchorElement> {
   private fileReference: FileReferenceModel;
+
+  private iconSpan : HTMLSpanElement;
+  private nameElement : HTMLParagraphElement;
 
   constructor(fileReference: FileReferenceModel) {
     super();
@@ -19,9 +24,18 @@ export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorE
     return true;
   }
 
-  onVBSComponentAdded(): void {
-    this.template.text = `File: ${this.fileReference.simple_file_name} | Type: ${this.fileReference.file_type} | Size: ${prettyFileSize(this.fileReference.bytes)}`
-    this.template.href = this.filePath();
+  hasAssignments() : boolean {
+    return true;
+  }
+
+  onTemplateAdded(): void {
+    this.nameElement.textContent = `${this.fileReference.simple_file_name} | Type: ${this.fileReference.file_type} | Size: ${prettyFileSize(this.fileReference.bytes)}`
+    this.element.href = this.filePath();
+
+    this.appendChildTemplateToElement(this.iconSpan, new IconTemplate({
+      icon: this.iconName(),
+      yOffset: 3
+    }))
   }
 
   // vbs-event-onclick
@@ -34,5 +48,17 @@ export class FileReferenceListEntryVBSComponent extends VBSComponent<HTMLAnchorE
 
   private filePath(): string {
     return `/files/${this.fileReference.id}`;
+  }
+
+  private iconName() : string {
+    if (isAudioFile(this.fileReference)) {
+      return Icons.HEADPHONES;
+    } else if (isVideoFile(this.fileReference)) {
+      return Icons.VIDEO;
+    } else if (isImageFile(this.fileReference)) {
+      return Icons.IMAGE;
+    } else {
+      return Icons.GENERIC_FILE;
+    }
   }
 }

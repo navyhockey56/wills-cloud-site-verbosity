@@ -1,13 +1,20 @@
-<div class="top-padded-1">
+<div style="border: 1px solid black; margin: 2vh 4vw; border-radius: 2rem; padding: 1em;">
+  <div style="text-align: center;">
+    <h1>Edit File</h1>
+  </div>
   <div>
-    <div class="top-padded-half">
-      <label>File Name</label>
-      <input data-vbs-assign="fileNameInput" class="is-wide">
+    <div>
+      <label class="label" for="fileName">Name</label>
+      <div class="top-padded-1" name="fileName">
+        <input data-vbs-assign="fileNameInput" class="input">
+      </div>
     </div>
 
-    <div class="top-padded-half">
-      <label>File Type</label>
-      <input data-vbs-assign="fileTypeInput" class="is-wide">
+    <div class="top-padded-1">
+      <label class="label" for="fileType">Type</label>
+      <div class="top-padded-1" name="fileType">
+        <input data-vbs-assign="fileTypeInput" class="input">
+      </div>
     </div>
   </div>
 

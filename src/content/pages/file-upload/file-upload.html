@@ -1,9 +1,20 @@
-<div class="padded-2">
+<div style="border: 1px solid black; margin: 2vh 4vw; border-radius: 2rem; padding: 1em;">
   <div class="center bottom-padded-1">
-    <h1>Upload a File</h1>
-    <div>
-      <a class="button" data-vbs-event-onclick="uploadLocalFile">Local File</a>
-      <a class="button" data-vbs-event-onclick="uploadRemoteFile">Remote File</a>
+    <h1>Upload</h1>
+    <div class="buttons">
+      <div>
+        <a class="button" data-vbs-event-onclick="uploadLocalFile">
+          <span data-vbs-assign="localFileIconSpan"></span>
+          Local File
+        </a>
+      </div>
+
+      <div>
+        <a class="button" data-vbs-event-onclick="uploadRemoteFile">
+          <span data-vbs-assign="remoteFileIconSpan"></span>
+          Remote File
+        </a>
+      </div>
     </div>
   </div>
   <template data-vbs-assign="uploadFormMount"></template>

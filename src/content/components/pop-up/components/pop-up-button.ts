@@ -1,6 +1,8 @@
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 
-export class PopUpButton extends VBSComponent<HTMLButtonElement> {
+export class PopUpButton extends AbstractTemplate<HTMLButtonElement> {
+  template: HTMLButtonElement;
+
   private buttonText: string;
   private onClick: (event: MouseEvent) => void
 
@@ -15,8 +17,8 @@ export class PopUpButton extends VBSComponent<HTMLButtonElement> {
     return require('./pop-up-button.html').default;
   }
 
-  beforeVBSComponentAdded(): void {
-    this.template.textContent = this.buttonText;
-    this.template.onclick = this.onClick;
+  beforeTemplateAdded(): void {
+    this.element.textContent = this.buttonText;
+    this.element.onclick = this.onClick;
   }
 }

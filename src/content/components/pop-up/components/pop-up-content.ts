@@ -1,9 +1,9 @@
 import { Callbacks } from "../../../../constants/callbacks.enum";
 import { ButtonModelOnClick, PopUpButtonModel, PopUpModel } from "../../../../services/models/general/pop-up.model";
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 import { PopUpButton } from "./pop-up-button";
 
-export class PopUpContent extends VBSComponent<HTMLElement> {
+export class PopUpContent extends AbstractTemplate<HTMLElement> {
   private popUpModel : PopUpModel;
 
   private removePopUpCallback : () => void;
@@ -27,7 +27,7 @@ export class PopUpContent extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.removePopUpCallback = this.registry.getCallback(Callbacks.REMOVE_POPUP.toString());
 
     this.headerElement.textContent = this.popUpModel.header;
@@ -41,7 +41,7 @@ export class PopUpContent extends VBSComponent<HTMLElement> {
         this.wrapButtonOnClick(buttonModel).bind(this)
       );
 
-      this.appendChildToMount(this.buttonPanel, popUpButton);
+      this.appendChildTemplateToElement(this.buttonPanel, popUpButton);
     });
   }
 

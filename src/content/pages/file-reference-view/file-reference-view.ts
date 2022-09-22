@@ -1,17 +1,19 @@
+import { VerbosityTemplate } from "verbosity-dom";
 import { Callbacks } from "../../../constants/callbacks.enum";
 import { FileReferencesService } from "../../../services/file-references.service";
 import { MessageCategory } from "../../../services/models/general/notification.model";
 import { PopUpModel } from "../../../services/models/general/pop-up.model";
 import { FileReferenceModel, isAudioFile, isImageFile, isPdfFile, isTextFile, isVideoFile, prettyFileSize } from "../../../services/models/responses/file-reference.response";
 import { isPlainLeftClick } from "../../../tools/event.tools";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 import { AudioViewer } from "./components/audio-viewer";
 import { ImageViewer } from "./components/image-viwer";
+import { MediaViewer } from "./components/media-viewer";
 import { PDFViewer } from "./components/pdf-viewer";
 import { TextViewer } from "./components/text-viewer";
 import { VideoViewer } from "./components/video-viewer";
 
-export class FileReferenceView extends VBSComponent<HTMLElement> {
+export class FileReferenceView extends AbstractTemplate<HTMLElement> {
   // Instance parameters
   private fileId : number;
   private fileReference : FileReferenceModel;
@@ -46,13 +48,12 @@ export class FileReferenceView extends VBSComponent<HTMLElement> {
     this.fileId = this.fileReference.id;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.populateTemplateWithFileData();
 
     if (!this.fileReference || !this.fileReference.download_url) {
       const fileService : FileReferencesService = this.registry.getSingleton(FileReferencesService);
       fileService.get(this.fileId, true).then((fileReference) => {
-        console.log(fileReference)
         if (!fileReference.okay) {
           throw Error('Unable to fetch file reference');
         }
@@ -66,7 +67,7 @@ export class FileReferenceView extends VBSComponent<HTMLElement> {
   private populateTemplateWithFileData() {
     if (!this.fileReference) return;
 
-    this.fileNameElement.textContent = this.fileReference.file_name;
+    this.fileNameElement.textContent = this.fileReference.simple_file_name;
     this.fileTypeElement.textContent = this.fileReference.file_type;
     this.sourceElement.textContent = this.fileReference.original_source || 'Unknown';
     this.sizeElement.textContent = prettyFileSize(this.fileReference.bytes);
@@ -81,24 +82,7 @@ export class FileReferenceView extends VBSComponent<HTMLElement> {
   private viewFile() : void {
     if (!this.fileReference || !this.fileReference.download_url) return;
 
-    let viewComponent : VBSComponent<HTMLElement> = null;
-    if (isImageFile(this.fileReference)) {
-      viewComponent = new ImageViewer(this.fileReference.download_url);
-    } else if (isAudioFile(this.fileReference)) {
-      viewComponent = new AudioViewer(this.fileReference.download_url);
-    } else if (isVideoFile(this.fileReference)) {
-      viewComponent = new VideoViewer(this.fileReference.download_url);
-    } else if (isTextFile(this.fileReference)) {
-      viewComponent = new TextViewer(this.fileReference.download_url);
-    } else if (isPdfFile(this.fileReference)) {
-      viewComponent = new PDFViewer(this.fileReference.download_url);
-    }
-
-    if (!viewComponent) {
-      throw Error(`No file viewer exists for file type ${this.fileReference.file_type}`);
-    }
-
-    this.dom.replaceMount(this.fileReferenceViewTemplate, viewComponent);
+    this.dom.replaceElementWithTemplate(this.fileReferenceViewTemplate, new MediaViewer(this.fileReference, this.fileReferenceViewTemplate));
   }
 
   // vbs onclick event

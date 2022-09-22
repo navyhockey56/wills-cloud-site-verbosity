@@ -1,6 +1,6 @@
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 
-export class PDFViewer extends VBSComponent<HTMLEmbedElement> {
+export class PDFViewer extends AbstractTemplate<HTMLEmbedElement> {
   private fileUrl : string;
 
   constructor(fileUrl: string) {
@@ -13,20 +13,7 @@ export class PDFViewer extends VBSComponent<HTMLEmbedElement> {
     return require('./pdf-viewer.html').default;
   }
 
-  beforeVBSComponentAdded(): void {
-    this.template.src = this.fileUrl
-    //fetch(this.fileUrl).then(this.loadData.bind(this));
-  }
-
-  async loadData(response: Response) {
-    const data = await (await response.body.getReader().read()).value;
-    // const values = [];
-    // for (let i = 0; i < data.length; i++) {
-    //   values.push(String.fromCharCode(data[i]));
-    // }
-
-    const base64 = btoa(String.fromCharCode(...data));
-
-    this.template.src = `data:application/pdf;base64,${base64}`
+  beforeTemplateAdded(): void {
+    this.element.src = this.fileUrl
   }
 }

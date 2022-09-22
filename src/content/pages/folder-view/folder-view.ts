@@ -3,13 +3,13 @@ import { FolderService } from "../../../services/folder.service";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
 import { APIResponse, PaginatedAPIResponse } from "../../../services/models/responses/api-response";
 import { FolderResponse } from "../../../services/models/responses/folder.response";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
-import { FileReferenceListEntryVBSComponent } from "./components/file-reference-list-entry";
-import { FoldersListEntryVBSComponent } from "./components/folder-list-entry";
+import { FileReferenceListEntry} from "./components/file-reference-list-entry";
+import { FoldersListEntry } from "./components/folder-list-entry";
 import { LoadMoreEntry } from "./components/load-more-entry";
 import { nextPageRequest } from "../../../services/tooling/request-helpers";
+import { AbstractTemplate } from "../../abstract-template";
 
-export class FolderViewPage extends VBSComponent<HTMLElement> {
+export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private folderService : FolderService;
 
@@ -42,7 +42,7 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
     return require("./folder-view.html").default;
   }
 
-  beforeVBSComponentAdded() : void {
+  beforeTemplateAdded() : void {
     this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
     this.folderService = this.registry.getSingleton(FolderService);
 
@@ -63,15 +63,15 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
       return;
     }
 
-    this.folderPathElement.textContent = `Current Folder: ${this.folder.path}`;
+    this.folderPathElement.textContent = `${this.folder.path}`;
 
     this.folder.children_folders.forEach(this.attachChildFolder.bind(this));
     this.loadFiles();
   }
 
   private attachChildFolder(childFolder: FolderResponse) {
-    const folderListEntry = new FoldersListEntryVBSComponent(childFolder);
-    this.appendChildToMount(this.foldersMount, folderListEntry, { id: `folder-entry-${childFolder.id}` });
+    const folderListEntry = new FoldersListEntry(childFolder);
+    this.appendChildTemplateToElement(this.foldersMount, folderListEntry, { id: `folder-entry-${childFolder.id}` });
   }
 
   private loadFiles() : void {
@@ -85,13 +85,13 @@ export class FolderViewPage extends VBSComponent<HTMLElement> {
       }
 
       response.data.forEach((fileReference : FileReferenceModel) => {
-        const fileListEntry = new FileReferenceListEntryVBSComponent(fileReference);
-        this.appendChildToMount(this.filesMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
+        const fileListEntry = new FileReferenceListEntry(fileReference);
+        this.appendChildTemplateToElement(this.filesMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
       });
 
       if (response.nextPage) {
         this.loadMoreEntry = new LoadMoreEntry(this.loadFiles.bind(this));
-        this.appendChildToMount(this.filesMount, this.loadMoreEntry);
+        this.appendChildTemplateToElement(this.filesMount, this.loadMoreEntry);
       }
     });
   }

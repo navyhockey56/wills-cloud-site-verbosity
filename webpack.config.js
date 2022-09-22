@@ -34,6 +34,10 @@ module.exports = () => {
           exclude: /node_modules/,
         },
         {
+          test: /\.txt$/i,
+          use: 'raw-loader',
+        },
+        {
           test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
           use: 'file-loader?name=[name].[ext]'
         }

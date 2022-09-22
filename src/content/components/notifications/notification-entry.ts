@@ -1,7 +1,7 @@
 import { MessageCategory, NotificationModel } from "../../../services/models/general/notification.model";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 
-export class NotificationEntry extends VBSComponent<HTMLLIElement> {
+export class NotificationEntry extends AbstractTemplate<HTMLLIElement> {
 
   private notification : NotificationModel;
 
@@ -22,7 +22,7 @@ export class NotificationEntry extends VBSComponent<HTMLLIElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.messageElement.textContent = this.notification.message;
 
     let backgroundColor : string = null;
@@ -41,6 +41,6 @@ export class NotificationEntry extends VBSComponent<HTMLLIElement> {
         break;
     }
 
-    this.template.style.backgroundColor = backgroundColor;
+    this.element.style.backgroundColor = backgroundColor;
   }
 }

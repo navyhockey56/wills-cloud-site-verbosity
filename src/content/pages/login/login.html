@@ -1,22 +1,38 @@
-<section class="padded-2">
-  <article class="panel">
+<div style="border: 1px solid black; margin: 2vh 4vw; border-radius: 2rem; padding: 1em;">
+  <div class="center"><h1>Login</h1></div>
+  <article>
     <section class="section">
-      <div class="field top-padded-1">
+      <div class="top-padded-1" style="min-width: 100%;">
         <label class="label">Username</label>
-        <div class="top-padded-quarter">
-          <input data-vbs-assign="usernameInput" class="input" placeholder="Your username"/>
+        <div class="top-padded-1">
+          <div style="display: inline-block;">
+            <span style="padding-right: 0.2em;" data-vbs-assign="usernameIconSpan"></span>
+          </div>
+          <div style="display: inline-block;">
+            <input
+              data-vbs-assign="usernameInput"
+              class="input"
+              style="display: inline-block;"
+              placeholder="Your username"
+            />
+          </div>
         </div>
       </div>
 
       <div class="field top-padded-1">
         <label class="label">Password</label>
-        <div class="top-padded-quarter">
-          <input
-            data-vbs-assign="passwordInput"
-            data-vbs-event-onkeydown="onEnterInPasswordField"
-            class="input"
-            placeholder="Your password"
-            type="password"/>
+        <div class="top-padded-1">
+          <div style="display: inline-block;">
+            <span style="padding-right: 0.2em;" data-vbs-assign="passwordIconSpan"></span>
+          </div>
+          <div style="display: inline-block;">
+            <input
+              data-vbs-assign="passwordInput"
+              data-vbs-event-onkeydown="onEnterInPasswordField"
+              class="input"
+              placeholder="Your password"
+              type="password"/>
+          </div>
         </div>
       </div>
 
@@ -25,4 +41,4 @@
       </div>
     </section>
   </article>
-</section>
+</div>

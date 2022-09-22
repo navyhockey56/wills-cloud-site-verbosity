@@ -1,13 +1,15 @@
+import { Icons } from "../../../constants/icons.enum";
 import { FileReferencesService } from "../../../services/file-references.service";
 import { PaginatedAPIResponse } from "../../../services/models/responses/api-response";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
 import { nextPageRequest } from "../../../services/tooling/request-helpers";
 import { isEnterKeyPress } from "../../../tools/event.tools";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
-import { FileReferenceListEntryVBSComponent } from "../folder-view/components/file-reference-list-entry";
+import { AbstractTemplate } from "../../abstract-template";
+import { IconTemplate } from "../../components/icon/icon-template";
+import { FileReferenceListEntry } from "../folder-view/components/file-reference-list-entry";
 import { LoadMoreEntry } from "../folder-view/components/load-more-entry";
 
-export class SearchPage extends VBSComponent<HTMLElement> {
+export class SearchPage extends AbstractTemplate<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private fileReferenceResponse : PaginatedAPIResponse<FileReferenceModel[]>;
   private loadMoreEntry : LoadMoreEntry;
@@ -15,6 +17,7 @@ export class SearchPage extends VBSComponent<HTMLElement> {
   // VBS Assignments
   private searchInput : HTMLInputElement;
   private searchResultsMount : HTMLSpanElement;
+  private searchButtonIconSpan : HTMLSpanElement;
 
   readTemplate(): string {
     return require('./search.html').default;
@@ -28,8 +31,12 @@ export class SearchPage extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
+    this.appendChildTemplateToElement(this.searchButtonIconSpan, new IconTemplate({
+      icon: Icons.SEARCH,
+      yOffset: -6
+    }));
   }
 
   private onEnterPress(event : KeyboardEvent) : void {
@@ -50,13 +57,13 @@ export class SearchPage extends VBSComponent<HTMLElement> {
       this.removeAllChildren();
 
       response.data.forEach((fileReference : FileReferenceModel) => {
-        const fileListEntry = new FileReferenceListEntryVBSComponent(fileReference);
-        this.appendChildToMount(this.searchResultsMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
+        const fileListEntry = new FileReferenceListEntry(fileReference);
+        this.appendChildTemplateToElement(this.searchResultsMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
       });
 
       if (response.nextPage) {
         this.loadMoreEntry = new LoadMoreEntry(this.loadMore.bind(this));
-        this.appendChildToMount(this.searchResultsMount, this.loadMoreEntry);
+        this.appendChildTemplateToElement(this.searchResultsMount, this.loadMoreEntry);
       }
     })
   }
@@ -76,13 +83,13 @@ export class SearchPage extends VBSComponent<HTMLElement> {
       }
 
       response.data.forEach((fileReference : FileReferenceModel) => {
-        const fileListEntry = new FileReferenceListEntryVBSComponent(fileReference);
-        this.appendChildToMount(this.searchResultsMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
+        const fileListEntry = new FileReferenceListEntry(fileReference);
+        this.appendChildTemplateToElement(this.searchResultsMount, fileListEntry);
       });
 
       if (response.nextPage) {
         this.loadMoreEntry = new LoadMoreEntry(this.loadMore.bind(this));
-        this.appendChildToMount(this.searchResultsMount, this.loadMoreEntry);
+        this.appendChildTemplateToElement(this.searchResultsMount, this.loadMoreEntry);
       }
     })
   }

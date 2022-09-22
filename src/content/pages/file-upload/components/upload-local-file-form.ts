@@ -1,10 +1,12 @@
 import { Callbacks } from "../../../../constants/callbacks.enum";
+import { Icons } from "../../../../constants/icons.enum";
 import { FileReferencesService } from "../../../../services/file-references.service";
 import { NotificationModel, MessageCategory } from "../../../../services/models/general/notification.model";
 import { APIResponse } from "../../../../services/models/responses/api-response";
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
+import { IconTemplate } from "../../../components/icon/icon-template";
 
-export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
+export class UploadLocalFileForm extends AbstractTemplate<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private selectedFile : File;
 
@@ -15,6 +17,8 @@ export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
   private fileInput : HTMLInputElement;
   private fileNameInput : HTMLInputElement;
   private uploadFileButton : HTMLAnchorElement;
+  private selectFileIconSpan : HTMLSpanElement;
+  private beginUploadIconSpan : HTMLSpanElement;
 
   readTemplate(): string {
     return require('./upload-local-file-form.html').default;
@@ -28,8 +32,17 @@ export class UploadLocalFileForm extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
+
+    this.appendChildTemplateToElement(this.selectFileIconSpan, new IconTemplate({
+      icon: Icons.PAPERCLIP,
+    }));
+
+    this.appendChildTemplateToElement(this.beginUploadIconSpan, new IconTemplate({
+      icon: Icons.UPLOAD,
+      yOffset: -6
+    }));
   }
 
   // VBS onclick event

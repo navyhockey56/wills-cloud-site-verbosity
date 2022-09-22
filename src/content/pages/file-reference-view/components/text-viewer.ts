@@ -1,7 +1,9 @@
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 
-export class TextViewer extends VBSComponent<HTMLParagraphElement> {
+export class TextViewer extends AbstractTemplate<HTMLDivElement> {
   private fileUrl : string;
+
+  private paragraphElement : HTMLParagraphElement;
 
   constructor(fileUrl: string) {
     super();
@@ -17,11 +19,11 @@ export class TextViewer extends VBSComponent<HTMLParagraphElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     fetch(this.fileUrl).then(this.loadData.bind(this));
   }
 
   async loadData(response: Response) {
-    this.template.textContent = await response.text();
+    this.paragraphElement.textContent = await response.text();
   }
 }

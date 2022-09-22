@@ -2,26 +2,35 @@
   <div>
     <div>
       <label
-        style="border: 1px solid #ccc; background-color: #1bbdfd; color: white; display: inline-block; cursor: pointer; border-radius: 25px;"
+        style="border: 1px solid #ccc; background-color: grey; color: white; display: inline-block; cursor: pointer;"
         class="vertical-padded-half horizontal-padded-three-quarters"
-      >Select File
+      >
+        <span data-vbs-assign="selectFileIconSpan"></span>
+        <span style="font-weight: bold">Select File</span>
         <input
           data-vbs-assign="fileInput"
           data-vbs-event-onchange="onFileSelected"
           style="display:none;"
           type="file"
-          class="top-padded-half"
+          class="input"
         >
       </label>
       <span data-vbs-assign="selectedFileNameElement">No File Selected</span>
     </div>
     <div class="top-padded-half">
-      <label>File Name</label>
-      <input data-vbs-assign="fileNameInput" class="is-wide">
+      <label class="label" for="fileName">File Name</label>
+      <div name="fileName" class="top-padded-half bottom-padded-half">
+        <input data-vbs-assign="fileNameInput" class="input" placeholder="Name of file...">
+      </div>
     </div>
   </div>
 
-  <div class="top-padded-1">
-    <a class="button" data-vbs-event-onclick="uploadFile" data-vbs-assign="uploadFileButton">Begin Upload</a>
+  <div class="top-padded-1 buttons">
+    <div>
+      <a class="button" data-vbs-event-onclick="uploadFile" data-vbs-assign="uploadFileButton">
+        <span data-vbs-assign="beginUploadIconSpan"></span>
+        Begin Upload
+      </a>
+    </div>
   </div>
 </div>

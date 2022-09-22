@@ -1,6 +1,8 @@
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
 
-export class LoadMoreEntry extends VBSComponent<HTMLAnchorElement> {
+export class LoadMoreEntry extends AbstractTemplate<HTMLAnchorElement> {
+  template: HTMLAnchorElement;
+
   private onClick : (event : MouseEvent) => void;
 
   constructor(onClick : (event : MouseEvent) => void) {

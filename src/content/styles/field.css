@@ -1,0 +1,10 @@
+div.field {
+  display: inline-block;
+  overflow-x: scroll;
+  max-width: 90%;
+  white-space: nowrap;
+}
+
+.field > label {
+  font-weight: bold;
+}

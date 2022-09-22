@@ -1,16 +1,25 @@
 <div class="top-padded-1">
   <div>
     <div>
-      <label>Remote File URL</label>
-      <input data-vbs-assign="fileUrlInput" class="is-wide">
+      <label class="label" for="fileUrl">Remote File URL</label>
+      <div class="top-padded-half bottom-padded-half" name="fileUrl">
+        <input data-vbs-assign="fileUrlInput" class="input" placeholder="Link to remote file...">
+      </div>
     </div>
     <div class="top-padded-half">
-      <label>File Name</label>
-      <input data-vbs-assign="fileNameInput" class="is-wide">
+      <label class="label" for="fileName">File Name</label>
+      <div class="top-padded-half bottom-padded-half" name="fileName">
+        <input data-vbs-assign="fileNameInput" class="input" placeholder="Name of file...">
+      </div>
     </div>
   </div>
 
-  <div class="top-padded-1">
-    <a class="button" data-vbs-event-onclick="uploadRemoteFile">Begin Upload</a>
+  <div class="top-padded-1 buttons">
+    <div>
+      <a class="button" data-vbs-event-onclick="uploadFile" data-vbs-assign="uploadFileButton">
+        <span data-vbs-assign="beginUploadIconSpan"></span>
+        Begin Upload
+      </a>
+    </div>
   </div>
 </div>

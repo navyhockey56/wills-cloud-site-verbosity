@@ -1,15 +1,15 @@
 import { Callbacks } from "../../../constants/callbacks.enum";
 import { NotificationModel } from "../../../services/models/general/notification.model";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 import { NotificationEntry } from "./notification-entry";
 
-export class NotificationPanel extends VBSComponent<HTMLUListElement> {
+export class NotificationPanel extends AbstractTemplate<HTMLUListElement> {
 
   readTemplate(): string {
     return require('./notification-panel.html').default;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.registry.registerCallback(
       Callbacks.ADD_NOTIFICATION.toString(),
       this.addNotification.bind(this)
@@ -18,7 +18,7 @@ export class NotificationPanel extends VBSComponent<HTMLUListElement> {
 
   private addNotification(notification: NotificationModel) {
     const notificationEntry : NotificationEntry = new NotificationEntry(notification);
-    this.appendChildToMount(this.template, notificationEntry);
+    this.appendChildTemplateToElement(this.element, notificationEntry);
 
     setTimeout(() => {
       this.removeChildComponent(notificationEntry);

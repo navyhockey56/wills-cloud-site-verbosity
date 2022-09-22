@@ -1,9 +1,14 @@
 import { FolderResponse } from "../../../../services/models/responses/folder.response";
 import { isPlainLeftClick } from "../../../../tools/event.tools";
-import { VBSComponent } from "../../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../../abstract-template";
+import { IconTemplate } from "../../../components/icon/icon-template";
 
-export class FoldersListEntryVBSComponent extends VBSComponent<HTMLAnchorElement> {
+export class FoldersListEntry extends AbstractTemplate<HTMLAnchorElement> {
+
   private folder : FolderResponse;
+
+  private iconSpan : HTMLSpanElement;
+  private nameElement : HTMLParagraphElement;
 
   constructor(folder : FolderResponse) {
     super();
@@ -19,9 +24,18 @@ export class FoldersListEntryVBSComponent extends VBSComponent<HTMLAnchorElement
     return true;
   }
 
-  onVBSComponentAdded() : void {
-    this.template.text = `Folder: ${this.folder.folder_name}`;
-    this.template.href = this.folderPath();
+  hasAssignments(): boolean {
+    return true;
+  }
+
+  beforeTemplateAdded() : void {
+    this.nameElement.textContent = this.folder.folder_name;
+    this.element.href = this.folderPath();
+
+    this.appendChildTemplateToElement(this.iconSpan, new IconTemplate({
+      icon: 'folder',
+      yOffset: 3
+    }));
   }
 
   // vbs-event-onclick

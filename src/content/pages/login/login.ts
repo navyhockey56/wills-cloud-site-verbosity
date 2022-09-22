@@ -5,14 +5,18 @@ import { APIResponse } from "../../../services/models/responses/api-response";
 import { LoginResponse } from "../../../services/models/responses/login.response";
 import { SessionService } from "../../../services/session.service";
 import { isEnterKeyPress } from "../../../tools/event.tools";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
+import { IconTemplate } from "../../components/icon/icon-template";
 
-export class LoginPage extends VBSComponent<HTMLElement> {
+export class LoginPage extends AbstractTemplate<HTMLElement> {
   private loginService : LoginService;
 
   // vbs-assign fields
   private usernameInput : HTMLInputElement;
   private passwordInput : HTMLInputElement;
+
+  private usernameIconSpan : HTMLSpanElement;
+  private passwordIconSpan : HTMLSpanElement;
 
   readTemplate() : string {
     return require('./login.html').default;
@@ -26,8 +30,10 @@ export class LoginPage extends VBSComponent<HTMLElement> {
     return true;
   }
 
-  beforeVBSComponentAdded() : void {
+  beforeTemplateAdded() : void {
     this.loginService = this.registry.getSingleton(LoginService);
+    this.appendChildTemplateToElement(this.usernameIconSpan, new IconTemplate({ icon: 'user' }));
+    this.appendChildTemplateToElement(this.passwordIconSpan, new IconTemplate({ icon: 'lock' }));
   }
 
   // vbs-event

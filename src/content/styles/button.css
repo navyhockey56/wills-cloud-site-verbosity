@@ -1,17 +1,18 @@
 a.button {
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  background-color: blue;
   color: white;
-  text-align: center;
-  border-radius: 25em;
   text-decoration: none !important;
+  font-weight: bold;
 }
 
+div.buttons > div {
+  display: inline-block;
+  margin: 0.75vh 0.75vw;
+}
 
-div.buttons > span {
-  padding-left: 0.1em;
-  padding-right: 0.1em;
+.button {
+  background-color: rgba(40, 60, 206, 0.898);
+  font-size: medium;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  border-radius: 1rem;
 }

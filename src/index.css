@@ -1,0 +1,10 @@
+.animated-cloud {
+  animation: slidein 20s infinite;
+  position: relative;
+}
+
+@keyframes slidein {
+  0%   { left: 0%; }
+  50%  { left: 80%; }
+  100% { left: 0%; }
+}

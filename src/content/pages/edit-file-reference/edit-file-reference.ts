@@ -2,9 +2,9 @@ import { FileReferencesService } from "../../../services/file-references.service
 import { UpdateFileReferenceRequest } from "../../../services/models/requests/update.file-reference.request";
 import { APIResponse } from "../../../services/models/responses/api-response";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
 
-export class EditFileReferencePage extends VBSComponent<HTMLDivElement> {
+export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
   private fileReferencesService : FileReferencesService;
 
   // Instance parameters
@@ -36,7 +36,7 @@ export class EditFileReferencePage extends VBSComponent<HTMLDivElement> {
     this.fileId = this.fileReference.id;
   }
 
-  beforeVBSComponentAdded(): void {
+  beforeTemplateAdded(): void {
     this.fileReferencesService = this.registry.getSingleton(FileReferencesService);
 
     if (!this.fileReference) {

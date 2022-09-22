@@ -1,31 +1,42 @@
-<div class="padded-1 center">
-  <h1 class="title">Will's Cloud</h1>
-  <div class="buttons">
-    <span>
+<div style="border: 1px solid black; margin: 2vh 4vw; border-radius: 2rem; padding: 1em;">
+  <div class="center"><h1 class="title">Will's Cloud</h1></div>
+  <div class="animated-cloud">
+    <img data-vbs-assign="imageElement" >
+    <p style="margin-top: -0.5em; padding-bottom: 0.5em;">To the Cloud!</p>
+  </div>
+  <!-- <div class="animated-cloud">
+    <span data-vbs-assign="cloudIconSpan"></span>
+    <p style="margin-top: -0.5em; padding-bottom: 0.5em;">To the Cloud!</p>
+  </div> -->
+  <div class="buttons center" style="padding-bottom: 1em;">
+    <div>
       <a class="button"
         href="/search"
         data-vbs-event-onclick="onSearchButtonClick"
       >
-        <strong>Search</strong>
+        <span data-vbs-assign="searchIconSpan"></span>
+        Search
       </a>
-    </span>
+    </div>
 
-    <span>
+    <div>
       <a class="button"
       data-vbs-assign="explorerButton"
       data-vbs-event-onclick="onExplorerButtonClick"
       >
-        <strong>Exporer</strong>
+        <span data-vbs-assign="explorerIconSpan"></span>
+        Exporer
       </a>
-    </span>
+    </div>
 
-    <span>
+    <div>
       <a class="button"
       href="/upload"
       data-vbs-event-onclick="onUploadButtonClick"
       >
-        <strong>Upload</strong>
+        <span data-vbs-assign="uploadIconSpan"></span>
+        Upload
       </a>
-    </span>
+    </div>
   </div>
 </div>

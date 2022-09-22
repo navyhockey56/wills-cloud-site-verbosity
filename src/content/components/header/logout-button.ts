@@ -1,8 +1,12 @@
+import { Icons } from "../../../constants/icons.enum";
 import { SessionService } from "../../../services/session.service";
-import { VBSComponent } from "../../../_verbosity/verbosity-component";
+import { AbstractTemplate } from "../../abstract-template";
+import { IconTemplate } from "../icon/icon-template";
 
-export class LogoutButton extends VBSComponent<HTMLAnchorElement> {
+export class LogoutButton extends AbstractTemplate<HTMLAnchorElement> {
   private sessionService : SessionService;
+
+  private iconSpan : HTMLSpanElement;
 
   readTemplate(): string {
     return require('./logout-button.html').default;
@@ -12,9 +16,16 @@ export class LogoutButton extends VBSComponent<HTMLAnchorElement> {
     return true;
   }
 
-  beforeVBSComponentAdded(): void {
+  hasAssignments() : boolean {
+    return true;
+  }
+
+  beforeTemplateAdded(): void {
     this.sessionService = this.registry.getSingleton(SessionService);
-    this.template.href = '/login';
+    this.appendChildTemplateToElement(this.iconSpan, new IconTemplate({
+      icon: Icons.DOOR,
+      yOffset: -6
+    }));
   }
 
   onClick(event: MouseEvent) : void {
