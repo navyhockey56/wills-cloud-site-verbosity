@@ -8,13 +8,19 @@ import { FoldersListEntry } from "./components/folder-list-entry";
 import { LoadMoreEntry } from "./components/load-more-entry";
 import { nextPageRequest } from "../../../services/tooling/request-helpers";
 import { AbstractTemplate } from "../../abstract-template";
+import { SessionService } from "../../../services/session.service";
+import { NotificationService } from "../../../services/notification.service";
+import { MessageCategory } from "../../../services/models/general/notification.model";
 
 export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   private fileReferenceService : FileReferencesService;
   private folderService : FolderService;
+  private notifcationService : NotificationService;
 
   private fileReferenceResponse : PaginatedAPIResponse<FileReferenceModel[]>;
   private loadMoreEntry : LoadMoreEntry;
+
+  private isPrivateModeEnabled : boolean;
 
   // Instance parameters
   private folder : FolderResponse;
@@ -24,8 +30,14 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   private filesMount : HTMLSpanElement;
   private foldersMount : HTMLSpanElement;
   private folderPathElement : HTMLParagraphElement;
+  private privateModeButtonDiv : HTMLDivElement;
+  private privateModeButton : HTMLButtonElement;
 
   hasAssignments(): boolean {
+    return true;
+  }
+
+  hasEventListeners() : boolean {
     return true;
   }
 
@@ -45,6 +57,12 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   beforeTemplateAdded() : void {
     this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
     this.folderService = this.registry.getSingleton(FolderService);
+    this.notifcationService = this.registry.getSingleton(NotificationService);
+
+    this.isPrivateModeEnabled = (this.registry.getSingleton(SessionService) as SessionService).isPrivateModeEnabled();
+    if (!this.isPrivateModeEnabled) {
+      this.privateModeButtonDiv.remove();
+    }
 
     this.loadFolder();
   }
@@ -64,6 +82,7 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
     }
 
     this.folderPathElement.textContent = `${this.folder.path}`;
+    this.setPrivateModeButtonText();
 
     this.folder.children_folders.forEach(this.attachChildFolder.bind(this));
     this.loadFiles();
@@ -93,6 +112,22 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
         this.loadMoreEntry = new LoadMoreEntry(this.loadFiles.bind(this));
         this.appendChildTemplateToElement(this.filesMount, this.loadMoreEntry);
       }
+    });
+  }
+
+  private setPrivateModeButtonText() : void {
+    this.privateModeButton.textContent = `${this.folder.private ? 'Make Public' : 'Make Private'}`;
+  }
+
+  private togglePrivacy() : void {
+    this.folderService.update(this.folderId, !this.folder.private).then(() => {
+      this.folder.private = !this.folder.private;
+      this.setPrivateModeButtonText();
+      this.notifcationService.notify({
+        message: 'Update complete',
+        messageCategory: MessageCategory.SUCCESS,
+        timeout: 1000
+      });
     });
   }
 }

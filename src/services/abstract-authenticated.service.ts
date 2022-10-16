@@ -4,15 +4,16 @@ import { SessionService } from "./session.service";
 import { toAPIResponse, toPaginatedResponse } from "./tooling/request-helpers";
 
 export abstract class AbstractAuthenticatedService {
-  private registry! : VerbosityRegistry;
+  protected registry! : VerbosityRegistry;
+  protected sessionService! : SessionService;
 
   constructor(registry : VerbosityRegistry) {
     this.registry = registry;
+    this.sessionService = this.registry.getSingleton(SessionService);
   }
 
   protected getSession() : string {
-    const sessionService : SessionService = this.registry.getSingleton(SessionService);
-    return sessionService.getSession();
+    return this.sessionService.getSession();
   }
 
   protected basicHeaders(contentType?: string) : any {

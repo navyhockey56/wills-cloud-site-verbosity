@@ -1,7 +1,10 @@
+import { Callbacks } from "../../../constants/callbacks.enum";
 import { Icons } from "../../../constants/icons.enum";
+import { NamedComponents } from "../../../constants/named-components.enum";
 import { FileReferencesService } from "../../../services/file-references.service";
 import { PaginatedAPIResponse } from "../../../services/models/responses/api-response";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
+import { SessionService } from "../../../services/session.service";
 import { nextPageRequest } from "../../../services/tooling/request-helpers";
 import { isEnterKeyPress } from "../../../tools/event.tools";
 import { AbstractTemplate } from "../../abstract-template";
@@ -10,14 +13,15 @@ import { FileReferenceListEntry } from "../folder-view/components/file-reference
 import { LoadMoreEntry } from "../folder-view/components/load-more-entry";
 
 export class SearchPage extends AbstractTemplate<HTMLElement> {
-  private fileReferenceService : FileReferencesService;
-  private fileReferenceResponse : PaginatedAPIResponse<FileReferenceModel[]>;
-  private loadMoreEntry : LoadMoreEntry;
+  private sessionService : SessionService;
+  private fileReferenceService: FileReferencesService;
+  private fileReferenceResponse: PaginatedAPIResponse<FileReferenceModel[]>;
+  private loadMoreEntry: LoadMoreEntry;
 
   // VBS Assignments
-  private searchInput : HTMLInputElement;
-  private searchResultsMount : HTMLSpanElement;
-  private searchButtonIconSpan : HTMLSpanElement;
+  private searchInput: HTMLInputElement;
+  private searchResultsMount: HTMLSpanElement;
+  private searchButtonIconSpan: HTMLSpanElement;
 
   readTemplate(): string {
     return require('./search.html').default;
@@ -33,21 +37,30 @@ export class SearchPage extends AbstractTemplate<HTMLElement> {
 
   beforeTemplateAdded(): void {
     this.fileReferenceService = this.registry.getSingleton(FileReferencesService);
+    this.sessionService = this.registry.getSingleton(SessionService);
+
     this.appendChildTemplateToElement(this.searchButtonIconSpan, new IconTemplate({
       icon: Icons.SEARCH,
       yOffset: -6
     }));
   }
 
-  private onEnterPress(event : KeyboardEvent) : void {
+  private onEnterPress(event: KeyboardEvent): void {
     if (isEnterKeyPress(event)) this.onSearch(event);
   }
 
-  private onSearch(event: Event) : void {
+  private onSearch(event: Event): void {
     event.preventDefault();
 
+    const searchValue = this.searchInput.value;
+    if (searchValue === 'private mode') {
+      this.sessionService.togglePrivateMode();
+      this.router.goTo('/');
+      return
+    }
+
     const request = { file_name: this.searchInput.value };
-    this.fileReferenceService.list(request).then((response : PaginatedAPIResponse<FileReferenceModel[]>) => {
+    this.fileReferenceService.list(request).then((response: PaginatedAPIResponse<FileReferenceModel[]>) => {
       this.fileReferenceResponse = response;
 
       if (!response.okay) {
@@ -56,7 +69,7 @@ export class SearchPage extends AbstractTemplate<HTMLElement> {
 
       this.removeAllChildren();
 
-      response.data.forEach((fileReference : FileReferenceModel) => {
+      response.data.forEach((fileReference: FileReferenceModel) => {
         const fileListEntry = new FileReferenceListEntry(fileReference);
         this.appendChildTemplateToElement(this.searchResultsMount, fileListEntry, { id: `file-reference-entry-${fileReference.id}` });
       });
@@ -68,10 +81,10 @@ export class SearchPage extends AbstractTemplate<HTMLElement> {
     })
   }
 
-  private loadMore() : void {
+  private loadMore(): void {
     const request = nextPageRequest(this.fileReferenceResponse, { file_name: this.searchInput.value });
 
-    this.fileReferenceService.list(request).then((response : PaginatedAPIResponse<FileReferenceModel[]>) => {
+    this.fileReferenceService.list(request).then((response: PaginatedAPIResponse<FileReferenceModel[]>) => {
       this.fileReferenceResponse = response;
 
       if (!response.okay) {
@@ -82,7 +95,7 @@ export class SearchPage extends AbstractTemplate<HTMLElement> {
         this.removeChildComponent(this.loadMoreEntry);
       }
 
-      response.data.forEach((fileReference : FileReferenceModel) => {
+      response.data.forEach((fileReference: FileReferenceModel) => {
         const fileListEntry = new FileReferenceListEntry(fileReference);
         this.appendChildTemplateToElement(this.searchResultsMount, fileListEntry);
       });

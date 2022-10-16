@@ -3,4 +3,5 @@ export interface FolderResponse {
   folder_name: string;
   path: string;
   children_folders?: FolderResponse[];
+  private: boolean;
 }

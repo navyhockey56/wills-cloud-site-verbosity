@@ -14,4 +14,5 @@ export interface FileReferencesRequest extends OrdablePaginatedRequest<FileRefer
   any_tag_ids?: number[];
   file_name?: string;
   parent_folder?: number;
+  show_private?: boolean;
 }

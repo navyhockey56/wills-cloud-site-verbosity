@@ -5,6 +5,7 @@ import { FileReferenceModel } from "./models/responses/file-reference.response";
 import { APIResponse, PaginatedAPIResponse } from "./models/responses/api-response";
 import { createEndpoint } from "./tooling/request-helpers";
 import { UpdateFileReferenceRequest } from "./models/requests/update.file-reference.request";
+import { NamedComponents } from "../constants/named-components.enum";
 
 export class FileReferencesService extends AbstractAuthenticatedService {
 
@@ -22,6 +23,9 @@ export class FileReferencesService extends AbstractAuthenticatedService {
   }
 
   async list(params: FileReferencesRequest = {}) : Promise<PaginatedAPIResponse<FileReferenceModel[]>> {
+    const showPrivate : boolean = this.sessionService.isPrivateModeEnabled();
+    params = { ...params, show_private: showPrivate };
+
     const endpoint = createEndpoint('file_references', params);
     const response : Response = await fetch(endpoint, {
       method: 'GET',

@@ -6,7 +6,8 @@ export interface FileReferenceModel {
   file_type: string;
   original_source: string;
   download_url?: string;
-  bytes: string
+  private: boolean;
+  bytes: string;
 }
 
 export const isImageFile = (fileReference : FileReferenceModel) : boolean => {

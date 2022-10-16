@@ -1,7 +1,9 @@
+import { NamedComponents } from "../../../constants/named-components.enum";
 import { FileReferencesService } from "../../../services/file-references.service";
 import { UpdateFileReferenceRequest } from "../../../services/models/requests/update.file-reference.request";
 import { APIResponse } from "../../../services/models/responses/api-response";
 import { FileReferenceModel } from "../../../services/models/responses/file-reference.response";
+import { SessionService } from "../../../services/session.service";
 import { AbstractTemplate } from "../../abstract-template";
 
 export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
@@ -14,6 +16,10 @@ export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
   // VBS Assignments
   private fileNameInput : HTMLInputElement;
   private fileTypeInput : HTMLInputElement;
+
+  private privateFieldDiv : HTMLDivElement;
+  private isPrivateInput : HTMLInputElement;
+  private privateModeEnabled : boolean;
 
   readTemplate(): string {
     return require('./edit-file-reference.html').default;
@@ -39,6 +45,11 @@ export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
   beforeTemplateAdded(): void {
     this.fileReferencesService = this.registry.getSingleton(FileReferencesService);
 
+    this.privateModeEnabled = (this.registry.getSingleton(SessionService) as SessionService).isPrivateModeEnabled();
+    if (!this.privateModeEnabled) {
+      this.privateFieldDiv.remove();
+    }
+
     if (!this.fileReference) {
       this.loadFile();
     } else {
@@ -60,6 +71,7 @@ export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
   private onFileLoaded() : void {
     this.fileNameInput.value = this.fileReference.file_name;
     this.fileTypeInput.value = this.fileReference.file_type;
+    this.isPrivateInput.checked = this.fileReference.private;
   }
 
   // VBS onclick event
@@ -71,6 +83,11 @@ export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
 
     const fileType = this.fileTypeInput.value;
     if (fileType !== this.fileReference.file_type) request.file_type = fileType;
+
+    if (this.privateModeEnabled) {
+      const isPrivate = this.isPrivateInput.checked;
+      if (isPrivate !== this.fileReference.private) request.private = isPrivate;
+    }
 
     if (Object.keys(request).length === 0) {
       this.router.goTo(`/files/${this.fileId}`, { fileReference: this.fileReference });

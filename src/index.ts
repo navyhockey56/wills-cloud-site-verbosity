@@ -16,6 +16,9 @@ import { NotificationPanel } from "./content/components/notifications/notificati
 import { SearchPage } from "./content/pages/search/search";
 import { EditFileReferencePage } from "./content/pages/edit-file-reference/edit-file-reference";
 import { PopUpFrame } from "./content/components/pop-up/pop-up";
+import { NamedComponents } from './constants/named-components.enum';
+import { Callbacks } from './constants/callbacks.enum';
+import { NotificationService } from './services/notification.service';
 
 require('./index.css');
 require('./content/styles/basic.css');
@@ -37,12 +40,26 @@ APP.setTemplateHydrater((template) => {
   simpleTemplate.router = APP.router;
 });
 
+const togglePrivateMode = () => {
+  const currentPrivateMode = APP.registry.getNamedComponent(NamedComponents.PRIVATE_MODE.toString());
+  APP.registry.registerNamedComponent(
+    NamedComponents.PRIVATE_MODE.toString(),
+    !currentPrivateMode
+  );
+
+  return !currentPrivateMode;
+}
+
+APP.registry.registerNamedComponent(NamedComponents.PRIVATE_MODE.toString(), false);
+APP.registry.registerCallback(Callbacks.TOGGLE_PRIVATE_MODE.toString(), togglePrivateMode);
+
 APP.registry.registerSingleton(new LoginService);
 
 const sessionService = new SessionService(APP.registry, APP.router);
 APP.registry.registerSingleton(sessionService);
 APP.registry.registerSingleton(new FileReferencesService(APP.registry));
 APP.registry.registerSingleton(new FolderService(APP.registry));
+APP.registry.registerSingleton(new NotificationService(APP.registry));
 
 const isLoggedInGuard = new IsLoggedInGuard(sessionService);
 const isNotLoggedInGuard = new IsNotLoggedInGuard(sessionService);

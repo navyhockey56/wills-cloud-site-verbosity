@@ -2,9 +2,14 @@
   <div class="center">
     <h1>Files</h1>
   </div>
-  <div class="bottom-padded-half">
-    <label class="label">Current Folder</label>
-    <p data-vbs-assign="folderPathElement"></p>
+  <div style="height: 10vh;">
+    <div class="bottom-padded-half" style="float: left">
+      <label class="label">Current Folder</label>
+      <p data-vbs-assign="folderPathElement"></p>
+    </div>
+    <div style="float: right" data-vbs-assign="privateModeButtonDiv">
+      <button class="button" data-vbs-assign="privateModeButton" data-vbs-event-onclick="togglePrivacy"></button>
+    </div>
   </div>
   <span data-vbs-assign="foldersMount"></span>
   <span data-vbs-assign="filesMount"></span>
