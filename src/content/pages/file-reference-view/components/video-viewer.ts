@@ -17,7 +17,7 @@ export class VideoViewer extends AbstractTemplate<HTMLElement> {
     return require('./video-viewer.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

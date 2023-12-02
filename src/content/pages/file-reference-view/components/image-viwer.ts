@@ -16,7 +16,7 @@ export class ImageViewer extends AbstractTemplate<HTMLElement> {
     return require('./image-viewer.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

@@ -20,11 +20,7 @@ export class FoldersListEntry extends AbstractTemplate<HTMLAnchorElement> {
     return require("./folder-list-entry.html").default;
   }
 
-  hasEventListeners(): boolean {
-    return true;
-  }
-
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

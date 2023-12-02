@@ -26,11 +26,7 @@ export class MediaViewer extends AbstractTemplate<HTMLDivElement> {
     return require('./media-viewer.html').default;
   }
 
-  hasAssignments() : boolean {
-    return true;
-  }
-
-  hasEventListeners() : boolean {
+  hasBindings(): boolean {
     return true;
   }
 

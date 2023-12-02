@@ -23,7 +23,7 @@ export class PopUpContent extends AbstractTemplate<HTMLElement> {
     return require('./pop-up-content.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

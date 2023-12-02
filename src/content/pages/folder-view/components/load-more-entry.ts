@@ -15,7 +15,7 @@ export class LoadMoreEntry extends AbstractTemplate<HTMLAnchorElement> {
     return require('./load-more-entry.html').default;
   }
 
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 }

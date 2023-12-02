@@ -20,11 +20,7 @@ export class FileReferenceListEntry extends AbstractTemplate<HTMLAnchorElement> 
     return require("./file-reference-list-entry.html").default;
   }
 
-  hasEventListeners(): boolean {
-    return true;
-  }
-
-  hasAssignments() : boolean {
+  hasBindings(): boolean {
     return true;
   }
 

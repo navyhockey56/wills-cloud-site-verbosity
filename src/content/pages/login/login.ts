@@ -22,11 +22,7 @@ export class LoginPage extends AbstractTemplate<HTMLElement> {
     return require('./login.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

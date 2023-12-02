@@ -9,6 +9,10 @@ export class NotificationPanel extends AbstractTemplate<HTMLUListElement> {
     return require('./notification-panel.html').default;
   }
 
+  hasBindings(): boolean {
+    return false;
+  }
+
   beforeTemplateAdded(): void {
     this.registry.registerCallback(
       Callbacks.ADD_NOTIFICATION.toString(),

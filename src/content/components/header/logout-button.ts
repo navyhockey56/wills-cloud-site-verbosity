@@ -12,11 +12,7 @@ export class LogoutButton extends AbstractTemplate<HTMLAnchorElement> {
     return require('./logout-button.html').default;
   }
 
-  hasEventListeners(): boolean {
-    return true;
-  }
-
-  hasAssignments() : boolean {
+  hasBindings(): boolean {
     return true;
   }
 

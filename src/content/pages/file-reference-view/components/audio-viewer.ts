@@ -17,7 +17,7 @@ export class AudioViewer extends AbstractTemplate<HTMLElement> {
     return require('./audio-viewer.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

@@ -18,7 +18,7 @@ export class NotificationEntry extends AbstractTemplate<HTMLLIElement> {
     return require('./notification-entry.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

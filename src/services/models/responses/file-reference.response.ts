@@ -1,5 +1,6 @@
 export interface FileReferenceModel {
   id: number;
+  folder_id: number;
   file_name: string;
   simple_file_name: string;
   file_location: string;
@@ -57,4 +58,11 @@ export const prettyFileSize = (bytes : string) : string => {
 
   const gigabytes = bytesAsInt / (1024 * 1024 * 1024);
   return `${twoDecimalPlaces(gigabytes)} gb`;
+}
+
+export const folderName = (fileReference : FileReferenceModel) : string => {
+  const folderNameParts = fileReference.file_name.split("/").slice(0, -1);
+  if (folderNameParts.length == 0) return "ROOT";
+
+  return folderNameParts.join("/");
 }

@@ -2,12 +2,22 @@
   <div style="text-align: center;">
     <h1>File Details</h1>
   </div>
+
   <div class="center">
     <div class="field padded-1">
       <label class="label">Name</label>
       <p data-vbs-assign="fileNameElement"></p>
     </div>
+  </div>
 
+  <div class="center">
+    <div class="field padded-1">
+      <label class="label">Folder</label>
+      <p><a data-vbs-assign="folderElement" data-vbs-event-onclick="goToFolder"></a></p>
+    </div>
+  </div>
+
+  <div class="center">
     <div class="field padded-1">
       <label class="label">Type</label>
       <p data-vbs-assign="fileTypeElement"></p>

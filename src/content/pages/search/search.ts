@@ -27,11 +27,7 @@ export class SearchPage extends AbstractTemplate<HTMLElement> {
     return require('./search.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

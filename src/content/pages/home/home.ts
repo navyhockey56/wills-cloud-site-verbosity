@@ -22,11 +22,7 @@ export class HomePage extends AbstractTemplate<HTMLDivElement> {
     return require("./home.html").default;
   }
 
-  hasEventListeners(): boolean {
-    return true;
-  }
-
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

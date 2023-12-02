@@ -1,17 +1,11 @@
-import { VerbosityTemplate } from "verbosity-dom";
 import { Callbacks } from "../../../constants/callbacks.enum";
 import { FileReferencesService } from "../../../services/file-references.service";
 import { MessageCategory } from "../../../services/models/general/notification.model";
 import { PopUpModel } from "../../../services/models/general/pop-up.model";
-import { FileReferenceModel, isAudioFile, isImageFile, isPdfFile, isTextFile, isVideoFile, prettyFileSize } from "../../../services/models/responses/file-reference.response";
+import { FileReferenceModel, folderName, prettyFileSize } from "../../../services/models/responses/file-reference.response";
 import { isPlainLeftClick } from "../../../tools/event.tools";
 import { AbstractTemplate } from "../../abstract-template";
-import { AudioViewer } from "./components/audio-viewer";
-import { ImageViewer } from "./components/image-viwer";
 import { MediaViewer } from "./components/media-viewer";
-import { PDFViewer } from "./components/pdf-viewer";
-import { TextViewer } from "./components/text-viewer";
-import { VideoViewer } from "./components/video-viewer";
 
 export class FileReferenceView extends AbstractTemplate<HTMLElement> {
   // Instance parameters
@@ -23,6 +17,7 @@ export class FileReferenceView extends AbstractTemplate<HTMLElement> {
   private fileTypeElement : HTMLParagraphElement;
   private sourceElement : HTMLParagraphElement;
   private sizeElement : HTMLParagraphElement;
+  private folderElement : HTMLAnchorElement;
   private downloadFileButton : HTMLAnchorElement;
   private editFileButton : HTMLAnchorElement;
   private fileReferenceViewTemplate : HTMLTemplateElement;
@@ -31,11 +26,7 @@ export class FileReferenceView extends AbstractTemplate<HTMLElement> {
     return require('./file-reference-view.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 
@@ -70,12 +61,21 @@ export class FileReferenceView extends AbstractTemplate<HTMLElement> {
     this.fileNameElement.textContent = this.fileReference.simple_file_name;
     this.fileTypeElement.textContent = this.fileReference.file_type;
     this.sourceElement.textContent = this.fileReference.original_source || 'Unknown';
+    this.folderElement.textContent = folderName(this.fileReference);
+    this.folderElement.href = `/folders/${this.fileReference.folder_id}`;
     this.sizeElement.textContent = prettyFileSize(this.fileReference.bytes);
 
     this.downloadFileButton.href = this.fileReference.download_url;
 
     this.editFileButton.href = `/files/${this.fileReference.id}/edit`
     this.editFileButton.onclick = this.editFile.bind(this);
+  }
+
+  // vbs onclick event
+  private goToFolder() : void {
+    if (!this.fileReference || !this.fileReference.download_url) return;
+
+    this.router.goTo(`/folders/${this.fileReference.folder_id}`)
   }
 
   // vbs onclick event

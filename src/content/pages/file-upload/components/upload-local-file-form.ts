@@ -24,11 +24,7 @@ export class UploadLocalFileForm extends AbstractTemplate<HTMLElement> {
     return require('./upload-local-file-form.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

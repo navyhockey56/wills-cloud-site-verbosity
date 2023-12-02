@@ -11,6 +11,7 @@ import { AbstractTemplate } from "../../abstract-template";
 import { SessionService } from "../../../services/session.service";
 import { NotificationService } from "../../../services/notification.service";
 import { MessageCategory } from "../../../services/models/general/notification.model";
+import { IconTemplate } from "../../components/icon/icon-template";
 
 export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   private fileReferenceService : FileReferencesService;
@@ -32,12 +33,9 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
   private folderPathElement : HTMLParagraphElement;
   private privateModeButtonDiv : HTMLDivElement;
   private privateModeButton : HTMLButtonElement;
+  private goToParentFolderSpan : HTMLSpanElement;
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners() : boolean {
+  hasBindings(): boolean {
     return true;
   }
 
@@ -79,6 +77,12 @@ export class FolderViewPage extends AbstractTemplate<HTMLElement> {
       });
 
       return;
+    }
+
+    if (this.folder.folder_id) {
+      this.appendChildTemplateToElement(this.goToParentFolderSpan, new IconTemplate({ icon: 'back-arrow' }));
+      this.goToParentFolderSpan.onclick = () => { this.router.goTo(`folders/${this.folder.folder_id}`) }
+      this.goToParentFolderSpan.title = "Go To Parent Folder";
     }
 
     this.folderPathElement.textContent = `${this.folder.path}`;

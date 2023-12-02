@@ -38,7 +38,7 @@ export class IconTemplate extends AbstractTemplate<HTMLElement> {
     return require ('./icon-template.html').default;
   }
 
-  hasAssignments() : boolean {
+  hasBindings(): boolean {
     return true;
   }
 

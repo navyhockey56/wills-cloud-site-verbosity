@@ -19,11 +19,7 @@ export class Header extends AbstractTemplate<HTMLDivElement> {
     return require('./header.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

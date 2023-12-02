@@ -18,11 +18,7 @@ export class UploadRemoteFileForm extends AbstractTemplate<HTMLElement> {
     return require('./upload-remote-file-form.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

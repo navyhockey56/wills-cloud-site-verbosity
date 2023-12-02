@@ -15,7 +15,7 @@ export class TextViewer extends AbstractTemplate<HTMLDivElement> {
     return require('./text-viewer.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

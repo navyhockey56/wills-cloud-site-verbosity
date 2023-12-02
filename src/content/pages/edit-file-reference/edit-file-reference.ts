@@ -25,11 +25,7 @@ export class EditFileReferencePage extends AbstractTemplate<HTMLDivElement> {
     return require('./edit-file-reference.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

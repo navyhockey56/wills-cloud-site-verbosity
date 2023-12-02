@@ -20,7 +20,10 @@ export class FolderService extends AbstractAuthenticatedService {
   }
 
   async getRootFolder() : Promise<APIResponse<FolderResponse>> {
-    const endpoint = createEndpoint('folders/root_folder');
+    const endpoint = createEndpoint('folders/root_folder', {
+      show_private: this.sessionService.isPrivateModeEnabled()
+    });
+
     const response : Response = await fetch(endpoint, {
       method: 'GET',
       headers: this.basicHeaders(),

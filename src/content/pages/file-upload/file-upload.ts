@@ -18,11 +18,7 @@ export class FileUploadPage extends AbstractTemplate<HTMLElement> {
     return require('./file-upload.html').default;
   }
 
-  hasAssignments(): boolean {
-    return true;
-  }
-
-  hasEventListeners(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

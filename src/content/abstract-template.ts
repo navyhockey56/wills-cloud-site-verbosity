@@ -10,6 +10,8 @@ export abstract class AbstractTemplate<T extends HTMLElement> implements Verbosi
 
   abstract readTemplate(): string;
 
+  abstract hasBindings(): boolean;
+
   /**
    * Appends the given child element to the given mount as a child element of
    * the mount.

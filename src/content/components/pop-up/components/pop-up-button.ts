@@ -17,6 +17,10 @@ export class PopUpButton extends AbstractTemplate<HTMLButtonElement> {
     return require('./pop-up-button.html').default;
   }
 
+  hasBindings(): boolean {
+    return false;
+  }
+
   beforeTemplateAdded(): void {
     this.element.textContent = this.buttonText;
     this.element.onclick = this.onClick;

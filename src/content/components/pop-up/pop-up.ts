@@ -13,7 +13,7 @@ export class PopUpFrame extends AbstractTemplate<HTMLElement> {
     return require('./pop-up.html').default;
   }
 
-  hasAssignments(): boolean {
+  hasBindings(): boolean {
     return true;
   }
 

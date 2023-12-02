@@ -13,6 +13,10 @@ export class PDFViewer extends AbstractTemplate<HTMLEmbedElement> {
     return require('./pdf-viewer.html').default;
   }
 
+  hasBindings(): boolean {
+    return false;
+  }
+
   beforeTemplateAdded(): void {
     this.element.src = this.fileUrl
   }
